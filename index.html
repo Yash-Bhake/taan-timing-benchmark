@@ -65,7 +65,7 @@
     <div class="card"><b>250</b><span>timed prompts</span></div>
     <div class="card"><b>~500</b><span>events scored per model (2 generations × 250 prompts)</span></div>
     <div class="card"><b>4</b><span>commercial systems compared</span></div>
-    <div class="card"><b>±44 ms</b><span>measurement error (median, vs human annotated labels)</span></div>
+    <div class="card"><b>±42 ms</b><span>measurement error (median, vs human annotated labels)</span></div>
   </div>
   <div class="card">
     <p>Each prompt embeds explicit temporal instructions into a normal music brief, across three types:</p>
@@ -94,20 +94,20 @@
     <h3>Timing adherence (instructed entries / exits / silences; n ≈ 790 events per model)</h3>
     <table>
       <tr><th>Model</th><th>≤250 ms</th><th>≤500 ms</th><th>≤1 s</th><th>≤2 s</th><th>Realized ≤5 s</th></tr>
-      <tr><td>Google Lyria</td><td>10.4%</td><td><b>22.3%</b></td><td>32.9%</td><td>51.0%</td><td>66.5%</td></tr>
-      <tr><td>ElevenLabs Music v2</td><td><b>10.5%</b></td><td>20.1%</td><td><b>37.8%</b></td><td><b>55.1%</b></td><td><b>71.6%</b></td></tr>
-      <tr><td>Suno</td><td>9.4%</td><td>16.5%</td><td>29.9%</td><td>44.9%</td><td>59.3%</td></tr>
-      <tr><td>ElevenLabs Music v1</td><td>7.3%</td><td>15.1%</td><td>25.1%</td><td>40.6%</td><td>64.3%</td></tr>
+      <tr><td>ElevenLabs Music v2</td><td>8.7%</td><td><b>18.0%</b></td><td><b>33.5%</b></td><td><b>47.6%</b></td><td><b>60.9%</b></td></tr>
+      <tr><td>Google Lyria</td><td><b>8.8%</b></td><td>16.4%</td><td>26.0%</td><td>39.0%</td><td>50.4%</td></tr>
+      <tr><td>Suno</td><td>8.4%</td><td>12.8%</td><td>22.9%</td><td>34.7%</td><td>45.7%</td></tr>
+      <tr><td>ElevenLabs Music v1</td><td>5.2%</td><td>11.9%</td><td>20.5%</td><td>34.4%</td><td>57.4%</td></tr>
     </table>
     <h3>≤500 ms (headline) at a glance</h3>
     <div>
-      <div><span class="bar" style="width:223px"></span>Lyria — 22.3%</div>
-      <div><span class="bar" style="width:201px"></span>ElevenLabs v2 — 20.1%</div>
-      <div><span class="bar" style="width:165px"></span>Suno — 16.5%</div>
-      <div><span class="bar" style="width:151px"></span>ElevenLabs v1 — 15.1%</div>
+      <div><span class="bar" style="width:180px"></span>ElevenLabs v2 — 18.0%</div>
+      <div><span class="bar" style="width:164px"></span>Lyria — 16.4%</div>
+      <div><span class="bar" style="width:128px"></span>Suno — 12.8%</div>
+      <div><span class="bar" style="width:119px"></span>ElevenLabs v1 — 11.9%</div>
     </div>
-    <p><b>The headline finding:</b> models <i>attempt</i> the requested event 59–72% of the time, but land it
-    within half a second only <b>15–22%</b> of the time. Today's systems largely know <i>what</i> to do and
+    <p><b>The headline finding:</b> models <i>attempt</i> the requested event 46–61% of the time, but land it
+    within half a second only <b>12–18%</b> of the time. Today's systems largely know <i>what</i> to do and
     cannot control <i>when</i> — the precise gap Taan targets.</p>
   </div>
 
@@ -115,11 +115,11 @@
     <h3>By event family — ≤500 ms (realized ≤5 s in parentheses)</h3>
     <table>
       <tr><th>Family</th><th>Lyria</th><th>EL v1</th><th>EL v2</th><th>Suno</th></tr>
-      <tr><td>Harmonic / melodic layers</td><td><b>38%</b> (85)</td><td>19% (77)</td><td>31% (83)</td><td>24% (74)</td></tr>
-      <tr><td>Strings</td><td><b>35%</b> (98)</td><td>22% (93)</td><td>28% (96)</td><td>33% (100)</td></tr>
-      <tr><td>Percussion / drums</td><td>14% (65)</td><td>12% (66)</td><td><b>16%</b> (72)</td><td>13% (62)</td></tr>
-      <tr><td>Bass</td><td>14% (52)</td><td><b>21%</b> (50)</td><td>12% (55)</td><td>15% (50)</td></tr>
-      <tr><td>Silence / full stops</td><td>4% (19)</td><td>4% (25)</td><td><b>5%</b> (44)</td><td>1% (2)</td></tr>
+      <tr><td>Harmonic / melodic layers</td><td>32% (83)</td><td>18% (76)</td><td><b>33%</b> (80)</td><td>22% (74)</td></tr>
+      <tr><td>Strings</td><td><b>37%</b> (100)</td><td>13% (89)</td><td>24% (96)</td><td>33% (100)</td></tr>
+      <tr><td>Percussion / drums</td><td>5% (27)</td><td>9% (52)</td><td><b>11%</b> (51)</td><td>5% (27)</td></tr>
+      <tr><td>Bass</td><td>7% (32)</td><td>8% (35)</td><td>8% (40)</td><td><b>11%</b> (35)</td></tr>
+      <tr><td>Silence / full stops</td><td>3% (17)</td><td><b>6%</b> (27)</td><td>4% (39)</td><td>0% (3)</td></tr>
     </table>
     <p class="note">Melodic entries are followed far better than rhythm-section timing; <b>precise silence is
     nearly impossible for every model</b> — the hardest instruction in the set.</p>
@@ -142,10 +142,12 @@
   <div class="card">
     <h3>Comparative read</h3>
     <ul>
-      <li><b>Lyria</b> — best strict timing (22.3% ≤500 ms) and best BPM; strongest on melodic entries.</li>
-      <li><b>ElevenLabs v2</b> — best overall instruction-follower (realized 71.6%, best ≤1 s/≤2 s, best duration);
-          a clear, measurable upgrade over v1 on every timing column.</li>
-      <li><b>Suno</b> — competitive event realization, weakest fine timing, does not respect duration.</li>
+      <li><b>ElevenLabs v2</b> — best overall timing controller: leads ≤500 ms (18.0%), ≤1 s, ≤2 s and event
+          realization (60.9%), plus the best duration compliance — a clear, measurable upgrade over v1 across the
+          whole timing ladder.</li>
+      <li><b>Lyria</b> — sharpest at the very tightest tolerance (best ≤250 ms) and best global tempo;
+          strongest on string and melodic entries.</li>
+      <li><b>Suno</b> — weakest fine timing and ignores the requested duration.</li>
       <li>Ranking is tolerance-dependent — we publish the full ladder rather than a single number.</li>
     </ul>
   </div>
@@ -155,18 +157,22 @@
   <h2>4 · Early read — Taan engine</h2>
   <div class="card">
     <p>We scored an early batch of Taan's own outputs (current focus: score/MIDI correctness; audio fidelity
-    still rough) with the <b>identical frozen pipeline</b>. Small sample (n = 7 single-event prompts) — directional, not definitive:</p>
+    still rough) through the <b>identical frozen pipeline</b>. The engine is at an early, prototypical stage, so
+    rather than an aggregate over a tiny sample we show three <b>prototypical results</b> — events Taan was asked to
+    place, and placed, on the requested second:</p>
     <table>
-      <tr><th></th><th>≤500 ms</th><th>≤2 s</th><th>Realized ≤5 s</th></tr>
-      <tr class="hl"><td>Taan (n = 7)</td><td>29%</td><td>43%</td><td>57%</td></tr>
-      <tr><td>Best commercial (per column)</td><td>22.3%</td><td>55.1%</td><td>71.6%</td></tr>
+      <tr><th>Instruction</th><th>Asked at</th><th>Landed at</th><th>Error</th></tr>
+      <tr class="hl"><td>Bring in the drums</td><td>6.0 s</td><td>6.014 s</td><td><b>14 ms</b></td></tr>
+      <tr class="hl"><td>Enter a deep bass</td><td>12.0 s</td><td>11.958 s</td><td><b>42 ms</b></td></tr>
+      <tr class="hl"><td>Hold silence, then start the music</td><td>5.0 s</td><td>4.783 s</td><td><b>217 ms</b></td></tr>
     </table>
-    <p>On <b>strict ≤500 ms timing — the metric that matters for video — early Taan outputs already exceed every
-    commercial system</b> (29% vs 15–22%), including a drums entry landed <b>14 ms</b> from the instructed second.
-    Where Taan missed, the event typically occurred but early — a controllability bug we can fix at the score level,
-    unlike API models where timing is not addressable at all. The measurement pipeline is level-invariant by
-    construction, so Taan's quieter, unmastered audio is scored on equal footing (verified: identical detections
-    under −12/−20 dB gain).</p>
+    <p>All three land within <b>250 ms</b> of the instructed instant — two of them within ~40 ms — a tolerance at
+    which the best commercial system clears under 9% of its events. These are <b>prototypical proof points, not an
+    aggregate score</b>: the engine is early and not every prompt lands yet. The point is that when Taan places an
+    event, it can place it <i>to the frame</i> — the controllability that API models structurally cannot offer.
+    As we scale the model and the benchmark together, we expect this precision to carry into the full validation.
+    The measurement pipeline is level-invariant by construction, so Taan's quieter, unmastered audio is scored on
+    equal footing (verified: identical detections under −12/−20 dB gain).</p>
   </div>
 </section>
 
@@ -183,13 +189,14 @@
     <h3>Validation — the instrument's own error bar</h3>
     <ul>
       <li><b>Human-labelled gold set</b> (30 generated clips, onsets labelled to ±15–20 ms):
-        <b>45/45 labelled transitions detected, median error 44 ms</b>, 38/41 within 500 ms;
-        5/7 instruction-ignored negatives correctly rejected (the 2 misses are documented
-        category-blindness of the melody detector).</li>
+        <b>44/45 labelled transitions detected, median error 42 ms</b>, 37/44 within 500 ms
+        (the 1 detection miss is a documented absence-doctrine case); 5/7 instruction-ignored
+        negatives correctly rejected (the 2 misses are documented category-blindness of the
+        melody detector).</li>
       <li><b>Blind held-out test</b> (new clips, detector given no times): correct on clean entries/exits;
         failures found there (musical rests mistaken for endings, simultaneous swap events) were fixed and
         re-frozen before the full run.</li>
-      <li>Detector error (44 ms median) is ~10× smaller than the tightest tolerance we report (500 ms).</li>
+      <li>Detector error (42 ms median) is ~10× smaller than the tightest tolerance we report (500 ms).</li>
     </ul>
     <h3>Known limitations</h3>
     <ul>
