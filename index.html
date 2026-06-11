@@ -40,20 +40,21 @@
 <header>
   <h1>Time-Controllability Benchmark for Music Generation</h1>
   <p>Can today's music-generation models place a musical event at the exact moment you ask for?
-     A reproducible benchmark of temporal instruction-following — by <b>Taan.ai</b>.</p>
+     A reproducible benchmark of temporal instruction-following - by <b>taan.ai</b>.</p>
 </header>
 <div class="wrap">
 
 <section id="motivation">
   <h2>1 · Motivation</h2>
   <div class="card">
-    <p>Taan.ai builds <b>time-controllable music generation conditioned on video</b>. A film cut, a beat
-    drop on an action moment, silence before a reveal — music for video lives and dies by <i>when</i>
-    things happen. Our customers' core requirement is not "generate nice music"; it is
-    <b>"make the drums enter at second 6"</b> — and have that actually happen at second 6.</p>
+    <p>taan.ai builds <b>time-controllable music generation conditioned on video</b>. A film cut, a beat
+    drop on an action moment, silence before a reveal, music for video lives and dies by <i>when</i>
+    things happen. Our customers' core requirement is to generate music that aligns with their videos and has a significant impact,
+    we understand the customers' requests such as <b>"make the drums enter at second 6"</b>,
+    and have that actually happen at second 6.</p>
     <p>While building our beta with 21 agencies, we found that leading music-generation APIs follow
     <i>what</i> to play far better than <i>when</i> to play it. No public benchmark measured this, so we
-    built one. This page presents the benchmark, the measurement pipeline, and results across four
+    built one. This page presents the benchmark, the overview of measurement pipeline, and results across four
     state-of-the-art systems — plus an early read on Taan's own engine.</p>
   </div>
 </section>
@@ -64,7 +65,7 @@
     <div class="card"><b>250</b><span>timed prompts</span></div>
     <div class="card"><b>~500</b><span>events scored per model (2 generations × 250 prompts)</span></div>
     <div class="card"><b>4</b><span>commercial systems compared</span></div>
-    <div class="card"><b>±44 ms</b><span>measurement error (median, vs human labels)</span></div>
+    <div class="card"><b>±44 ms</b><span>measurement error (median, vs human annotated labels)</span></div>
   </div>
   <div class="card">
     <p>Each prompt embeds explicit temporal instructions into a normal music brief, across three types:</p>
@@ -177,25 +178,8 @@
       <span class="step">routing<br><span class="note">each event → best feature source</span></span><span class="arr">→</span>
       <span class="step">features<br><span class="note">neural stems · HPSS · onset trains · timbre novelty</span></span><span class="arr">→</span>
       <span class="step">3 conditions<br><span class="note">transition ∧ precondition ∧ persistence</span></span><span class="arr">→</span>
-      <span class="step">two-tier score</span>
+      <span class="step">Score</span>
     </div>
-    <h3>Key design choices</h3>
-    <ul>
-      <li><b>Per-family routing.</b> Named drums → the drum stem of a neural source separator; broad percussion →
-        harmonic/percussive separation ∪ drum-stem onsets; bass → bass stem (+ sub-band fallback); new melodic layers
-        (cello, strings, brass…) → a <b>timbre-novelty</b> detector (MFCC + chroma self-similarity), since no separator
-        isolates "the new melody" from an existing mix; silence → full-mix loudness vs a clip-relative floor.</li>
-      <li><b>Percussion is an onset <i>train</i>, not a level</b> — we detect where the train of percussive accents
-        starts/stops, then snap to the exact accent. Robust to sparse grooves and to a <i>new</i> rhythm layered over
-        an existing one.</li>
-      <li><b>Three agreements per event.</b> A detection requires (a) the strongest matching transition near the
-        instructed time, (b) the correct precondition (absent-before for entries / absent-after for exits), and
-        (c) persistence — the instrument must <i>stay</i> after entering (a stray hit is not an entry; a musical rest
-        is not an ending). This is what controls false positives.</li>
-      <li><b>Level-invariance.</b> Every threshold is relative to the clip's own measured levels — no recalibration
-        across providers, masters, or our own unmastered outputs.</li>
-      <li><b>One frozen configuration</b> for all models; every constant documented with its rationale.</li>
-    </ul>
     <h3>Validation — the instrument's own error bar</h3>
     <ul>
       <li><b>Human-labelled gold set</b> (30 generated clips, onsets labelled to ±15–20 ms):
@@ -209,22 +193,12 @@
     </ul>
     <h3>Known limitations</h3>
     <ul>
-      <li>The melody detector is category-blind: it detects "a new tonal layer", not "specifically a cello" —
-        quantified as 5/7 negative rejection and published with the results.</li>
       <li>Swells/crescendos have no single onset; detector and ear can disagree by up to ~1 s on gradual entries.</li>
-      <li>Timing is scored on category-level events; instrument identity and audio quality are explicitly out of scope.</li>
+      <li>Timing is scored on category-level events; exact instrument identity and audio quality are kept explicitly out of scope.</li>
     </ul>
   </div>
 </section>
 
-<section id="next">
-  <h2>6 · What's next</h2>
-  <div class="card"><ul>
-    <li>Scale the Taan sample to the full 250-prompt set as our engine matures.</li>
-    <li>Grow the human-labelled pool (esp. negatives) and publish threshold-sensitivity sweeps.</li>
-    <li>Add new systems as they release — one frozen pipeline makes scores directly comparable.</li>
-  </ul></div>
-</section>
 
 <footer>Taan.ai · Time-Controllability Benchmark · June 2026 — measurements via a frozen, human-validated DSP pipeline; full methodology available on request.</footer>
 </div>
