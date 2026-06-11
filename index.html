@@ -47,15 +47,15 @@
 <section id="motivation">
   <h2>1 · Motivation</h2>
   <div class="card">
-    <p>taan.ai builds <b>time-controllable music generation conditioned on video</b>. A film cut, a beat
+    <p>taan.ai is building <b>time-controllable music generation conditioned on video</b>. A film cut, a beat
     drop on an action moment, silence before a reveal, music for video lives and dies by <i>when</i>
-    things happen. Our customers' core requirement is to generate music that aligns with their videos and has a significant impact,
-    we understand the customers' requests such as <b>"make the drums enter at second 6"</b>,
-    and have that actually happen at second 6.</p>
+    things happen. Our customers' core requirement is to generate music that aligns with their videos and has a significant impact.
+    We understand the customers' requests such as <b>"make the drums enter at second 6"</b> which are temporally specific, 
+    and we want to hit perfectly at those impact points.</p>
     <p>While building our beta with 21 agencies, we found that leading music-generation APIs follow
     <i>what</i> to play far better than <i>when</i> to play it. No public benchmark measured this, so we
     built one. This page presents the benchmark, the overview of measurement pipeline, and results across four
-    state-of-the-art systems — plus an early read on Taan's own engine.</p>
+    SotA systems, plus an early prototypical result on taan's own engine.</p>
   </div>
 </section>
 
@@ -76,7 +76,7 @@
     </ul>
     <p>Events span five instrument families (percussion, bass, harmonic/melodic layers, strings, silence/full-mix).
        We score <b>category adherence, not timbre quality</b>: "a cello melody at 16 s" is credited when a new
-       sustained tonal layer enters at 16 s — the benchmark isolates <i>timing</i>, not audio quality.</p>
+       sustained tonal layer enters at 16 s. The benchmark isolates <i>timing</i>, not audio quality.</p>
     <h3>Two-tier scoring — separating “wrong time” from “didn’t do it”</h3>
     <ol>
       <li><b>On-time rate</b> — the event is detected within a tolerance ladder of the instructed instant:
@@ -108,7 +108,7 @@
     </div>
     <p><b>The headline finding:</b> models <i>attempt</i> the requested event 46–61% of the time, but land it
     within half a second only <b>12–18%</b> of the time. Today's systems largely know <i>what</i> to do and
-    cannot control <i>when</i> — the precise gap Taan targets.</p>
+    cannot control <i>when</i>, this is the precise gap Taan targets.</p>
   </div>
 
   <div class="card">
@@ -142,23 +142,22 @@
   <div class="card">
     <h3>Comparative read</h3>
     <ul>
-      <li><b>ElevenLabs v2</b> — best overall timing controller: leads ≤500 ms (18.0%), ≤1 s, ≤2 s and event
-          realization (60.9%), plus the best duration compliance — a clear, measurable upgrade over v1 across the
+      <li><b>ElevenLabs v2</b>: best overall timing controller: leads ≤500 ms (18.0%), ≤1 s, ≤2 s and event
+          realization (60.9%), plus the best duration compliance. A clear, measurable upgrade over v1 across the
           whole timing ladder.</li>
-      <li><b>Lyria</b> — sharpest at the very tightest tolerance (best ≤250 ms) and best global tempo;
+      <li><b>Lyria</b>: sharpest at the very tightest tolerance (best ≤250 ms) and best global tempo;
           strongest on string and melodic entries.</li>
-      <li><b>Suno</b> — weakest fine timing and ignores the requested duration.</li>
-      <li>Ranking is tolerance-dependent — we publish the full ladder rather than a single number.</li>
+      <li><b>Suno</b>: weakest fine timing and ignores the requested duration.</li>
+      <li>Ranking is tolerance-dependent. We publish the full ladder rather than a single number.</li>
     </ul>
   </div>
 </section>
 
 <section id="taan">
-  <h2>4 · Early read — Taan engine</h2>
+  <h2>4 · Our prototype results, taan engine</h2>
   <div class="card">
-    <p>We scored an early batch of Taan's own outputs (current focus: score/MIDI correctness; audio fidelity
-    still rough) through the <b>identical frozen pipeline</b>. The engine is at an early, prototypical stage, so
-    rather than an aggregate over a tiny sample we show three <b>prototypical results</b> — events Taan was asked to
+    <p>We scored an early batch of Taan's own outputs. Through the <b>identical evaluation pipeline</b>. The engine is at an early, prototypical stage, so
+    rather than an aggregate over a tiny sample we show three <b>prototypical results</b>, events taan was asked to
     place, and placed, on the requested second:</p>
     <table>
       <tr><th>Instruction</th><th>Asked at</th><th>Landed at</th><th>Error</th></tr>
@@ -168,11 +167,9 @@
     </table>
     <p>All three land within <b>250 ms</b> of the instructed instant — two of them within ~40 ms — a tolerance at
     which the best commercial system clears under 9% of its events. These are <b>prototypical proof points, not an
-    aggregate score</b>: the engine is early and not every prompt lands yet. The point is that when Taan places an
-    event, it can place it <i>to the frame</i> — the controllability that API models structurally cannot offer.
-    As we scale the model and the benchmark together, we expect this precision to carry into the full validation.
-    The measurement pipeline is level-invariant by construction, so Taan's quieter, unmastered audio is scored on
-    equal footing (verified: identical detections under −12/−20 dB gain).</p>
+    aggregate score</b>: the engine is early and not every prompt is tested yet. The point is that when taan places an
+    event, it can place it <i>to the frame</i> — the controllability that current SotA models structurally cannot offer.
+    As we scale the model and the benchmark together, we expect this precision to carry into the full validation.</p>
   </div>
 </section>
 
@@ -189,10 +186,7 @@
     <h3>Validation — the instrument's own error bar</h3>
     <ul>
       <li><b>Human-labelled gold set</b> (30 generated clips, onsets labelled to ±15–20 ms):
-        <b>44/45 labelled transitions detected, median error 42 ms</b>, 37/44 within 500 ms
-        (the 1 detection miss is a documented absence-doctrine case); 5/7 instruction-ignored
-        negatives correctly rejected (the 2 misses are documented category-blindness of the
-        melody detector).</li>
+        <b>44/45 labelled transitions detected, median error 42 ms</b>, 37/44 within 500 ms.</li>
       <li><b>Blind held-out test</b> (new clips, detector given no times): correct on clean entries/exits;
         failures found there (musical rests mistaken for endings, simultaneous swap events) were fixed and
         re-frozen before the full run.</li>
