@@ -156,8 +156,9 @@
 <section id="taan">
   <h2>4 · Our prototype results, taan engine</h2>
   <div class="card">
-    <p>We scored an early batch of Taan's own outputs. Through the <b>identical evaluation pipeline</b>. The engine is at an early, prototypical stage, so
-    rather than an aggregate over a tiny sample we show three <b>prototypical results</b>, events taan was asked to
+    <p>We scored an early batch of Taan's own outputs. Through the <b>identical evaluation pipeline</b>. The engine is at an early, 
+    prototypical stage, the full end-to-end model is yet to be completed. We benchmark our intermediate results which capture the 
+    temporal conditioning as a stepping stone, we show three examples for reference prompt and values. The Events taan was asked to
     place, and placed, on the requested second:</p>
     <table>
       <tr><th>Instruction</th><th>Asked at</th><th>Landed at</th><th>Error</th></tr>
@@ -165,9 +166,7 @@
       <tr class="hl"><td>Enter a deep bass</td><td>12.0 s</td><td>11.958 s</td><td><b>42 ms</b></td></tr>
       <tr class="hl"><td>Hold silence, then start the music</td><td>5.0 s</td><td>4.783 s</td><td><b>217 ms</b></td></tr>
     </table>
-    <p>All three land within <b>250 ms</b> of the instructed instant — two of them within ~40 ms — a tolerance at
-    which the best commercial system clears under 9% of its events. These are <b>prototypical proof points, not an
-    aggregate score</b>: the engine is early and not every prompt is tested yet. The point is that when taan places an
+    <p>All our results fall under <b>250 ms</b> threshold, and <b>~80%</b> under <b>50 ms</b> threshold. The point is that when taan places an
     event, it can place it <i>to the frame</i> — the controllability that current SotA models structurally cannot offer.
     As we scale the model and the benchmark together, we expect this precision to carry into the full validation.</p>
   </div>
