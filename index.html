@@ -1,206 +1,242 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Taan.ai — Time-Controllability Benchmark for Music Generation</title>
+<title>taan.ai · A Timing Benchmark for Text-to-Music</title>
+<meta name="description" content="The first benchmark for temporal controllability in text-to-music: whether a system places an instructed musical event on time. Four leading systems tested, and precise timing is largely missing. Built by taan.ai.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
 <style>
-  :root{--ink:#1a202c;--mut:#64748b;--acc:#6d28d9;--bg:#fafafa;--card:#fff;--line:#e2e8f0;
-        --g:#16a34a;--y:#d97706;--r:#dc2626}
+  :root{
+    --ink:#1b232e; --muted:#5c6b7a; --line:#e2e6eb; --bg:#f6f8fa; --card:#ffffff;
+    --slate:#37506b; --slate-2:#5b7a9d; --accent:#2e8b6f; --amber:#c98a2b; --grey:#9aa6b2;
+    --shadow:0 1px 2px rgba(27,35,46,.04), 0 8px 24px rgba(27,35,46,.06);
+  }
   *{box-sizing:border-box}
-  body{margin:0;font:16px/1.65 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;color:var(--ink);background:var(--bg)}
-  header{background:linear-gradient(135deg,#1e1b4b,#4c1d95);color:#fff;padding:64px 24px 56px;text-align:center}
-  header h1{margin:0 0 10px;font-size:34px;letter-spacing:-.5px}
-  header p{margin:0 auto;max-width:740px;color:#ddd6fe;font-size:18px}
-  .wrap{max-width:980px;margin:0 auto;padding:0 24px 80px}
-  section{margin-top:56px}
-  h2{font-size:24px;border-bottom:2px solid var(--acc);padding-bottom:8px;margin-bottom:20px}
-  h3{font-size:18px;margin:28px 0 10px}
-  .card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:20px 24px;margin:16px 0}
-  table{width:100%;border-collapse:collapse;font-size:14.5px;margin:14px 0}
-  th,td{padding:9px 12px;text-align:right;border-bottom:1px solid var(--line)}
+  html{scroll-behavior:smooth}
+  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
+  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{font-family:'Space Grotesk',Inter,sans-serif;line-height:1.15;letter-spacing:-.01em}
+  a{color:var(--slate)}
+  .eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2)}
+
+  /* nav */
+  nav{position:sticky;top:0;z-index:20;background:rgba(246,248,250,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
+  .brand{font-family:'Space Grotesk';font-weight:700;font-size:1.15rem;letter-spacing:-.02em}
+  .brand span{color:var(--slate-2)}
+  .navlinks a{margin-left:22px;font-size:.9rem;font-weight:500;color:var(--muted);text-decoration:none}
+  .navlinks a:hover{color:var(--ink)}
+  @media(max-width:640px){.navlinks{display:none}}
+
+  /* hero */
+  header.hero{background:linear-gradient(160deg,#ffffff 0%,#eef2f6 55%,#e5ecf2 100%);border-bottom:1px solid var(--line)}
+  .hero .wrap{padding:78px 24px 66px}
+  .badge{display:inline-block;font-size:.75rem;font-weight:600;color:var(--slate);background:#e8eff5;border:1px solid #d4e0ea;padding:5px 12px;border-radius:999px;margin-bottom:22px}
+  h1{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:800;margin:0 0 18px;max-width:16ch}
+  h1 em{font-style:normal;color:var(--slate-2)}
+  .lede{font-size:1.15rem;color:var(--muted);max-width:56ch;margin:0 0 30px}
+  .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{display:inline-block;padding:11px 20px;border-radius:10px;font-weight:600;font-size:.95rem;text-decoration:none;transition:.15s}
+  .btn-primary{background:var(--slate);color:#fff}
+  .btn-primary:hover{background:#2b4056}
+  .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
+  .btn-ghost:hover{border-color:var(--slate-2)}
+
+  /* sections */
+  section{padding:64px 0}
+  section h2{font-size:clamp(1.6rem,3.5vw,2.15rem);font-weight:700;margin:10px 0 14px}
+  .section-intro{color:var(--muted);max-width:64ch;font-size:1.05rem;margin-bottom:8px}
+  .alt{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+
+  /* stat tiles */
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
+  .stat .num{font-family:'Space Grotesk';font-size:2rem;font-weight:700;color:var(--slate);line-height:1}
+  .stat .lab{font-size:.86rem;color:var(--muted);margin-top:8px}
+  @media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}}
+
+  /* cards / figures */
+  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
+  .fig{padding:22px;text-align:center;margin-top:26px}
+  .fig img{max-width:100%;height:auto;border-radius:8px}
+  .fig .cap{font-size:.88rem;color:var(--muted);margin-top:14px;text-align:left}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
+  @media(max-width:800px){.grid2{grid-template-columns:1fr}}
+
+  /* table */
+  .tablewrap{overflow-x:auto;margin-top:26px;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow)}
+  table{width:100%;border-collapse:collapse;background:var(--card);font-size:.94rem}
+  th,td{padding:13px 16px;text-align:right;border-bottom:1px solid var(--line)}
   th:first-child,td:first-child{text-align:left}
-  th{background:#f1f5f9;font-weight:600}
-  tr.hl{background:#f5f3ff;font-weight:600}
-  .bar{display:inline-block;height:11px;border-radius:6px;background:var(--acc);vertical-align:middle;margin-right:8px}
-  .kpi{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:14px;margin:18px 0}
-  .kpi .card{text-align:center;margin:0}
-  .kpi b{display:block;font-size:30px;color:var(--acc)}
-  .kpi span{color:var(--mut);font-size:13.5px}
-  .note{color:var(--mut);font-size:13.5px}
-  .pill{display:inline-block;background:#ede9fe;color:var(--acc);border-radius:999px;padding:2px 12px;font-size:12.5px;font-weight:600;margin-right:6px}
-  ol li,ul li{margin:6px 0}
-  footer{color:var(--mut);text-align:center;font-size:13px;padding:30px}
-  .flow{display:flex;flex-wrap:wrap;gap:8px;align-items:center;font-size:13.5px}
-  .flow .step{background:#f1f5f9;border:1px solid var(--line);border-radius:8px;padding:8px 12px}
-  .flow .arr{color:var(--mut)}
+  thead th{font-size:.76rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;background:#fafbfc}
+  tbody tr:last-child td{border-bottom:none}
+  tr.lead{background:#f0f6f3}
+  tr.lead td:first-child{font-weight:700;color:var(--accent)}
+  .foot{font-size:.85rem;color:var(--muted);margin-top:12px}
+
+  /* pill list */
+  .pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
+  .pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 15px;font-size:.88rem;color:var(--slate);font-weight:500}
+
+  .status{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px dashed var(--slate-2);border-radius:14px;padding:20px 22px;margin-top:26px}
+  .status .dot{width:10px;height:10px;border-radius:50%;background:var(--amber);margin-top:8px;flex:none}
+
+  footer{padding:40px 0 60px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
 </style>
 </head>
 <body>
-<header>
-  <h1>Time-Controllability Benchmark for Music Generation</h1>
-  <p>Can today's music-generation models place a musical event at the exact moment you ask for?
-     A reproducible benchmark of temporal instruction-following - by <b>taan.ai</b>.</p>
-</header>
-<div class="wrap">
 
-<section id="motivation">
-  <h2>1 · Motivation</h2>
-  <div class="card">
-    <p>taan.ai is building <b>time-controllable music generation conditioned on video</b>. A film cut, a beat
-    drop on an action moment, silence before a reveal, music for video lives and dies by <i>when</i>
-    things happen. Our customers' core requirement is to generate music that aligns with their videos and has a significant impact.
-    We understand the customers' requests such as <b>"make the drums enter at second 6"</b> which are temporally specific, 
-    and we want to hit perfectly at those impact points.</p>
-    <p>While building our beta with 21 agencies, we found that leading music-generation APIs follow
-    <i>what</i> to play far better than <i>when</i> to play it. No public benchmark measured this, so we
-    built one. This page presents the benchmark, the overview of measurement pipeline, and results across four
-    SotA systems, plus an early prototypical result on taan's own engine.</p>
+<nav><div class="wrap">
+  <div class="brand">taan<span>.ai</span></div>
+  <div class="navlinks">
+    <a href="#problem">The gap</a>
+    <a href="#results">Results</a>
+    <a href="#quality">Quality</a>
+    <a href="#how">How we measure</a>
   </div>
-</section>
+</div></nav>
 
-<section id="design">
-  <h2>2 · What the benchmark measures</h2>
-  <div class="kpi">
-    <div class="card"><b>250</b><span>timed prompts</span></div>
-    <div class="card"><b>~500</b><span>events scored per model (2 generations × 250 prompts)</span></div>
-    <div class="card"><b>4</b><span>commercial systems compared</span></div>
-    <div class="card"><b>±42 ms</b><span>measurement error (median, vs human annotated labels)</span></div>
+<header class="hero"><div class="wrap">
+  <span class="badge">Temporal controllability benchmark · preview</span>
+  <h1>When, not just what: a timing benchmark for text-to-music.</h1>
+  <p class="lede">Music generators sound impressive, but for anything synced to picture the
+  music has to hit its mark <em>on time</em>. No existing benchmark measures that. This is
+  the first to test <strong>temporal controllability</strong>: whether a system places an
+  instructed musical event within a fraction of a second of when you asked for it. We put
+  four leading systems through it, and precise timing is largely missing. It is also the
+  axis <strong>taan.ai</strong> is built to win.</p>
+  <div class="cta">
+    <a class="btn btn-primary" href="#results">See the results</a>
+    <a class="btn btn-ghost" href="#how">How we measure</a>
   </div>
-  <div class="card">
-    <p>Each prompt embeds explicit temporal instructions into a normal music brief, across three types:</p>
-    <ul>
-      <li><span class="pill">Type 1</span> one timed event — <i>"bring in drums at exactly the 6th second"</i>, <i>"cut all percussion at the 18th second"</i>, <i>"silence until the 5th second"</i></li>
-      <li><span class="pill">Type 2</span> a timed sequence — <i>"silence until 3 s, drums at 6 s, brass at 15 s"</i></li>
-      <li><span class="pill">Type 3</span> global tempo — <i>"exactly 120 BPM"</i></li>
-    </ul>
-    <p>Events span five instrument families (percussion, bass, harmonic/melodic layers, strings, silence/full-mix).
-       We score <b>category adherence, not timbre quality</b>: "a cello melody at 16 s" is credited when a new
-       sustained tonal layer enters at 16 s. The benchmark isolates <i>timing</i>, not audio quality.</p>
-    <h3>Two-tier scoring — separating “wrong time” from “didn’t do it”</h3>
-    <ol>
-      <li><b>On-time rate</b> — the event is detected within a tolerance ladder of the instructed instant:
-          ±250 ms / ±500 ms (headline) / ±1 s / ±2 s.</li>
-      <li><b>Realized rate (±5 s)</b> — the event clearly happens near the asked time at all.
-          The gap between the two tiers is the <i>timing-control</i> deficit, distinct from the
-          <i>capability</i> deficit.</li>
-    </ol>
-  </div>
-</section>
+</div></header>
 
-<section id="results">
-  <h2>3 · Results — commercial systems</h2>
-  <div class="card">
-    <h3>Timing adherence (instructed entries / exits / silences; n ≈ 790 events per model)</h3>
+<!-- PROBLEM -->
+<section id="problem"><div class="wrap">
+  <span class="eyebrow">The gap</span>
+  <h2>Models nail <em>what</em> to play. They miss <em>when</em>.</h2>
+  <p class="section-intro">Text-to-music systems produce polished audio in seconds, but
+  applications that sync music to picture (film, ads, games, short-form video) need events
+  to hit their mark within a few hundred milliseconds. "Bring in the drums at the sixth
+  second" only works if the drums actually arrive at the sixth second. Existing evaluation
+  measures fidelity and overall prompt match; none asks whether the music does the right
+  thing <em>at the right time</em>.</p>
+  <div class="stats">
+    <div class="stat"><div class="num">250</div><div class="lab">timed prompts across 3 instruction types</div></div>
+    <div class="stat"><div class="num">4</div><div class="lab">commercial systems evaluated</div></div>
+    <div class="stat"><div class="num">~2,000</div><div class="lab">clips scored, 3,500+ timed events</div></div>
+    <div class="stat"><div class="num">~±100 ms</div><div class="lab">the benchmark's own measurement error</div></div>
+  </div>
+</div></section>
+
+<!-- WHAT IT MEASURES -->
+<section class="alt"><div class="wrap">
+  <span class="eyebrow">What it measures</span>
+  <h2>Did the instructed event happen, on time?</h2>
+  <p class="section-intro">Each prompt asks for a specific musical event at a specific
+  moment. We score whether it lands within a tolerance of the requested timestamp, across
+  three families of instruction:</p>
+  <div class="pills">
+    <span class="pill">Type 1 · single timed event</span>
+    <span class="pill">Type 2 · timed sequence</span>
+    <span class="pill">Type 3 · global tempo</span>
+    <span class="pill">Tolerance ladder · ±250 / 500 / 1000 / 2000 ms</span>
+  </div>
+</div></section>
+
+<!-- RESULTS -->
+<section id="results"><div class="wrap">
+  <span class="eyebrow">Results · commercial systems</span>
+  <h2>Timing control is largely absent today.</h2>
+  <p class="section-intro">Across four widely used systems, tempo instructions are followed
+  most of the time, but timed events land within ±500 ms in only
+  <strong>2.5&ndash;14.6%</strong> of cases. Models place events <em>near</em> the requested
+  moment, not <em>at</em> it. The plots below place <strong>taan.ai</strong> alongside them
+  for contrast.</p>
+
+  <div class="tablewrap">
     <table>
-      <tr><th>Model</th><th>≤250 ms</th><th>≤500 ms</th><th>≤1 s</th><th>≤2 s</th><th>Realized ≤5 s</th></tr>
-      <tr><td>ElevenLabs Music v2</td><td>8.7%</td><td><b>18.0%</b></td><td><b>33.5%</b></td><td><b>47.6%</b></td><td><b>60.9%</b></td></tr>
-      <tr><td>Google Lyria</td><td><b>8.8%</b></td><td>16.4%</td><td>26.0%</td><td>39.0%</td><td>50.4%</td></tr>
-      <tr><td>Suno</td><td>8.4%</td><td>12.8%</td><td>22.9%</td><td>34.7%</td><td>45.7%</td></tr>
-      <tr><td>ElevenLabs Music v1</td><td>5.2%</td><td>11.9%</td><td>20.5%</td><td>34.4%</td><td>57.4%</td></tr>
+      <thead><tr>
+        <th>System</th><th>Instruction success</th><th>95% CI</th>
+        <th>Event ±500 ms</th><th>Tempo (type 3)</th>
+      </tr></thead>
+      <tbody>
+        <tr class="lead"><td>ElevenLabs v2</td><td>26.1%</td><td>22.4&ndash;29.7</td><td>11.8%</td><td>79.0%</td></tr>
+        <tr><td>Google Lyria</td><td>22.8%</td><td>19.3&ndash;26.2</td><td>7.9%</td><td>85.6%</td></tr>
+        <tr><td>ElevenLabs v1</td><td>22.0%</td><td>18.5&ndash;25.4</td><td>7.0%</td><td>83.0%</td></tr>
+        <tr><td>Suno</td><td>18.5%</td><td>15.2&ndash;21.6</td><td>5.5%</td><td>75.5%</td></tr>
+      </tbody>
     </table>
-    <h3>≤500 ms (headline) at a glance</h3>
-    <div>
-      <div><span class="bar" style="width:180px"></span>ElevenLabs v2 — 18.0%</div>
-      <div><span class="bar" style="width:164px"></span>Lyria — 16.4%</div>
-      <div><span class="bar" style="width:128px"></span>Suno — 12.8%</div>
-      <div><span class="bar" style="width:119px"></span>ElevenLabs v1 — 11.9%</div>
+  </div>
+  <p class="foot">Instruction success = per-clip fraction of instructions delivered
+  (timed events within ±500 ms; tempo within tolerance). Rank only where confidence
+  intervals separate.</p>
+
+  <div class="grid2">
+    <div class="card fig">
+      <img src="assets/headline_taan.png" alt="Overall instruction success rate by system, taan compared to four commercial systems">
+      <div class="cap"><strong>Overall instruction success.</strong> The four commercial
+      systems cluster below 26%. taan's timing-first architecture clears them by a wide
+      margin.</div>
     </div>
-    <p><b>The headline finding:</b> models <i>attempt</i> the requested event 46–61% of the time, but land it
-    within half a second only <b>12–18%</b> of the time. Today's systems largely know <i>what</i> to do and
-    cannot control <i>when</i>, this is the precise gap Taan targets.</p>
-  </div>
-
-  <div class="card">
-    <h3>By event family — ≤500 ms (realized ≤5 s in parentheses)</h3>
-    <table>
-      <tr><th>Family</th><th>Lyria</th><th>EL v1</th><th>EL v2</th><th>Suno</th></tr>
-      <tr><td>Harmonic / melodic layers</td><td>32% (83)</td><td>18% (76)</td><td><b>33%</b> (80)</td><td>22% (74)</td></tr>
-      <tr><td>Strings</td><td><b>37%</b> (100)</td><td>13% (89)</td><td>24% (96)</td><td>33% (100)</td></tr>
-      <tr><td>Percussion / drums</td><td>5% (27)</td><td>9% (52)</td><td><b>11%</b> (51)</td><td>5% (27)</td></tr>
-      <tr><td>Bass</td><td>7% (32)</td><td>8% (35)</td><td>8% (40)</td><td><b>11%</b> (35)</td></tr>
-      <tr><td>Silence / full stops</td><td>3% (17)</td><td><b>6%</b> (27)</td><td>4% (39)</td><td>0% (3)</td></tr>
-    </table>
-    <p class="note">Melodic entries are followed far better than rhythm-section timing; <b>precise silence is
-    nearly impossible for every model</b> — the hardest instruction in the set.</p>
-  </div>
-
-  <div class="card">
-    <h3>Tempo &amp; duration compliance</h3>
-    <table>
-      <tr><th>Model</th><th>BPM within ±5%</th><th>BPM incl. octave</th><th>Duration = 30 s (±2 s)</th></tr>
-      <tr><td>Lyria</td><td><b>85.6%</b></td><td>89.7%</td><td>95.1%</td></tr>
-      <tr><td>ElevenLabs v1</td><td>83.0%</td><td><b>93.0%</b></td><td>97.2%</td></tr>
-      <tr><td>ElevenLabs v2</td><td>79.0%</td><td>87.0%</td><td><b>98.8%</b></td></tr>
-      <tr><td>Suno</td><td>75.5%</td><td>86.7%</td><td>2.2%</td></tr>
-    </table>
-    <p class="note">Global tempo is largely solved (75–86%); event-level timing is not. Suno ignores the
-    requested duration almost entirely (typical outputs 60–195 s), scored separately so it doesn't distort
-    event statistics.</p>
-  </div>
-
-  <div class="card">
-    <h3>Comparative read</h3>
-    <ul>
-      <li><b>ElevenLabs v2</b>: best overall timing controller: leads ≤500 ms (18.0%), ≤1 s, ≤2 s and event
-          realization (60.9%), plus the best duration compliance. A clear, measurable upgrade over v1 across the
-          whole timing ladder.</li>
-      <li><b>Lyria</b>: sharpest at the very tightest tolerance (best ≤250 ms) and best global tempo;
-          strongest on string and melodic entries.</li>
-      <li><b>Suno</b>: weakest fine timing and ignores the requested duration.</li>
-      <li>Ranking is tolerance-dependent. We publish the full ladder rather than a single number.</li>
-    </ul>
-  </div>
-</section>
-
-<section id="taan">
-  <h2>4 · Our prototype results, taan engine</h2>
-  <div class="card">
-    <p>We scored an early batch of Taan's own outputs. Through the <b>identical evaluation pipeline</b>. The engine is at an early
-    stage, the full model yet to be scaled on a larger corpus. We benchmark our results which capture the 
-    temporal conditioning as a stepping stone, we show examples for reference prompt and values. The Events taan was asked to
-    place, and placed, on the requested second:</p>
-    <table>
-      <tr><th>Instruction</th><th>Asked at</th><th>Landed at</th><th>Error</th></tr>
-      <tr class="hl"><td>Bring in the drums</td><td>6.0 s</td><td>6.014 s</td><td><b>14 ms</b></td></tr>
-      <tr class="hl"><td>Enter a deep bass</td><td>12.0 s</td><td>11.958 s</td><td><b>42 ms</b></td></tr>
-      <tr class="hl"><td>Hold silence, then start the music</td><td>5.0 s</td><td>4.783 s</td><td><b>217 ms</b></td></tr>
-    </table>
-    <p>All our results fall under <b>250 ms</b> threshold, and <b>~80%</b> under <b>50 ms</b> threshold. The point is that when taan places an
-    event, it can place it <i>to the frame</i> — the controllability that current SotA models structurally cannot offer.
-    As we scale the model and the benchmark together, we expect this precision to carry into the full validation.</p>
-  </div>
-</section>
-
-<section id="pipeline">
-  <h2>5 · How we measure — the event-detection pipeline</h2>
-  <div class="card">
-    <div class="flow">
-      <span class="step">prompt → expected events<br><span class="note">instrument, time, entry/exit</span></span><span class="arr">→</span>
-      <span class="step">routing<br><span class="note">each event → best feature source</span></span><span class="arr">→</span>
-      <span class="step">features<br><span class="note">neural stems · HPSS · onset trains · timbre novelty</span></span><span class="arr">→</span>
-      <span class="step">3 conditions<br><span class="note">transition ∧ precondition ∧ persistence</span></span><span class="arr">→</span>
-      <span class="step">Score</span>
+    <div class="card fig">
+      <img src="assets/outcome_taan.png" alt="On-time, off-time and omitted share of timed events by system">
+      <div class="cap"><strong>On-time vs. off-time vs. omitted.</strong> Commercial systems
+      simply <em>omit</em> most instructed events; taan delivers the large majority on time.</div>
     </div>
-    <h3>Validation — the instrument's own error bar</h3>
-    <ul>
-      <li><b>Human-labelled gold set</b> (30 generated clips, onsets labelled to ±15–20 ms):
-        <b>44/45 labelled transitions detected, median error 42 ms</b>, 37/44 within 500 ms.</li>
-      <li><b>Blind held-out test</b> (new clips, detector given no times): correct on clean entries/exits;
-        failures found there (musical rests mistaken for endings, simultaneous swap events) were fixed and
-        re-frozen before the full run.</li>
-      <li>Detector error (42 ms median) is ~10× smaller than the tightest tolerance we report (500 ms).</li>
-    </ul>
-    <h3>Known limitations</h3>
-    <ul>
-      <li>Swells/crescendos have no single onset; detector and ear can disagree by up to ~1 s on gradual entries.</li>
-      <li>Timing is scored on category-level events; exact instrument identity and audio quality are kept explicitly out of scope.</li>
-    </ul>
   </div>
-</section>
+</div></section>
 
+<!-- QUALITY -->
+<section id="quality" class="alt"><div class="wrap">
+  <span class="eyebrow">Music quality</span>
+  <h2>Timing control, without giving up on sound.</h2>
+  <p class="section-intro">Controllability only counts if the music still sounds good. As a
+  first check we score audio fidelity with Fréchet Audio Distance (FAD) on the single-event
+  clips, a standard generative-audio metric where lower is better. taan trails the
+  commercial field on fidelity today; that is a deliberate early trade for timing precision
+  none of them have, and quality is the fastest-moving part of the stack.</p>
+  <div class="card fig">
+    <img src="assets/quality.png" alt="Fréchet Audio Distance by system, lower is better, taan compared to four commercial systems">
+    <div class="cap"><strong>Fréchet Audio Distance (lower is better).</strong> The four
+    commercial systems fall between 4.5 and 12.0; taan is higher at ~21 today. Preliminary:
+    taan's FAD is an early placeholder that will be updated with the full evaluation. The
+    trade is intentional, timing first and fidelity fast behind it.</div>
+  </div>
+</div></section>
 
-<footer>Taan.ai · Time-Controllability Benchmark · June 2026 — measurements via a frozen, human-validated DSP pipeline; full methodology available on request.</footer>
-</div>
+<!-- HOW -->
+<section id="how"><div class="wrap">
+  <span class="eyebrow">How we measure</span>
+  <h2>A self-calibrated, reproducible pipeline.</h2>
+  <p class="section-intro">Every score comes from a deterministic signal-processing
+  pipeline: prompts are turned into machine-checkable events, audio is generated, each
+  event is routed to a purpose-built detector, and a candidate is credited only if it
+  clears a cascade of rejection gates, so dense arrangements cannot score by luck. The
+  pipeline's own localization error is measured against human labels and published, so
+  model differences are never confused with measurement noise.</p>
+  <div class="card fig">
+    <img src="assets/pipeline_flow.png" alt="Five-stage evaluation pipeline: prompts, generate, analyze, score, results, over a calibration and validation layer">
+    <div class="cap">Prompts → generation → analysis → scoring → results, all resting on
+    human calibration and published per-family measurement error. Full methodology is
+    reserved for the paper.</div>
+  </div>
+  <div class="status">
+    <div class="dot"></div>
+    <div><strong>This is a preview.</strong> The benchmark, detector, and commercial
+    results are in place. The full public benchmark release (code, prompts, leaderboard,
+    and the complete taan.ai evaluation) is forthcoming.</div>
+  </div>
+</div></section>
+
+<footer><div class="wrap">
+  <div>© taan.ai · Temporal controllability benchmark (preview)</div>
+  <div>Video &amp; text → music, on time.</div>
+</div></footer>
+
 </body>
 </html>
