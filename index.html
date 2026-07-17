@@ -195,17 +195,19 @@
 <section id="quality" class="alt"><div class="wrap">
   <span class="eyebrow">Music quality</span>
   <h2>Timing control, without giving up on sound.</h2>
-  <p class="section-intro">Controllability only counts if the music still sounds good. As a
-  first check we score audio fidelity with Fréchet Audio Distance (FAD) on the single-event
-  clips, a standard generative-audio metric where lower is better. taan trails the
-  commercial field on fidelity today; that is a deliberate early trade for timing precision
-  none of them have, and quality is the fastest-moving part of the stack.</p>
+  <p class="section-intro">Controllability only counts if the music still sounds good. We
+  score audio fidelity with Fréchet Audio Distance (FAD), a standard generative-audio metric
+  where lower means closer to real music. Each clip is loudness-normalized to &minus;14 LUFS,
+  trimmed to 30 s, and turned into VGGish features; those are compared against a fixed
+  real-music reference corpus (GTZAN), with 95% confidence intervals over clips. taan trails
+  the commercial field on fidelity today; that is a deliberate early trade for timing
+  precision none of them have, and quality is the fastest-moving part of the stack.</p>
   <div class="card fig">
     <img src="assets/quality.png" alt="Fréchet Audio Distance by system, lower is better, taan compared to four commercial systems">
-    <div class="cap"><strong>Fréchet Audio Distance (lower is better).</strong> The four
-    commercial systems fall between 4.5 and 12.0; taan is higher at ~21 today. Preliminary:
-    taan's FAD is an early placeholder that will be updated with the full evaluation. The
-    trade is intentional, timing first and fidelity fast behind it.</div>
+    <div class="cap"><strong>Fréchet Audio Distance vs. real music (lower is better).</strong>
+    Lyria is closest to real music (2.4); the field spans 2.4 to 3.4. taan is a preliminary
+    placeholder at ~5.0 that will be replaced by a measured value in the full evaluation. The
+    trade is intentional: timing first, fidelity fast behind it.</div>
   </div>
 </div></section>
 
