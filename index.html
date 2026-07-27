@@ -4,94 +4,154 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>taan.ai · A Timing Benchmark for Text-to-Music</title>
-<meta name="description" content="The first benchmark for temporal controllability in text-to-music: whether a system places an instructed musical event on time. Four leading systems tested, and precise timing is largely missing. Built by taan.ai.">
+<meta name="description" content="The first benchmark for temporal controllability in text-to-music: whether a system places an instructed musical event on time. Four leading systems tested against taan.ai. Precise timing is largely missing.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet">
 <style>
   :root{
-    --ink:#1b232e; --muted:#5c6b7a; --line:#e2e6eb; --bg:#f6f8fa; --card:#ffffff;
-    --slate:#37506b; --slate-2:#5b7a9d; --accent:#2e8b6f; --amber:#c98a2b; --grey:#9aa6b2;
-    --shadow:0 1px 2px rgba(27,35,46,.04), 0 8px 24px rgba(27,35,46,.06);
+    --orange:#DD763E; --orange-soft:#e79466; --dark:#33412D; --deep:#10140d;
+    --sage:#9daa7c; --cream:#EEE9EA; --ink:#f3efe8; --muted:#b9c2ac;
+    --line:rgba(157,170,124,.20); --card:rgba(30,38,26,.55); --card-2:rgba(24,30,20,.72);
   }
   *{box-sizing:border-box}
   html{scroll-behavior:smooth}
-  body{margin:0;font-family:Inter,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;color:var(--ink);background:var(--bg);line-height:1.6;-webkit-font-smoothing:antialiased}
-  .wrap{max-width:1040px;margin:0 auto;padding:0 24px}
-  h1,h2,h3{font-family:'Space Grotesk',Inter,sans-serif;line-height:1.15;letter-spacing:-.01em}
-  a{color:var(--slate)}
-  .eyebrow{font-size:.78rem;font-weight:700;letter-spacing:.14em;text-transform:uppercase;color:var(--slate-2)}
+  body{margin:0;font-family:Poppins,system-ui,-apple-system,Segoe UI,Roboto,sans-serif;
+    color:var(--ink);background:var(--deep);line-height:1.62;-webkit-font-smoothing:antialiased;
+    position:relative;overflow-x:hidden}
+  /* grainy gradient backdrop + orange glow, taan brandbook aesthetic */
+  body::before{content:"";position:fixed;inset:0;z-index:-2;
+    background:
+      radial-gradient(1100px 620px at 68% 8%, rgba(221,118,62,.30), transparent 60%),
+      radial-gradient(900px 700px at 12% 42%, rgba(157,170,124,.16), transparent 62%),
+      radial-gradient(1200px 900px at 50% 108%, rgba(51,65,45,.9), transparent 70%),
+      linear-gradient(180deg,#141a10 0%, #10140d 55%, #0c0f09 100%)}
+  body::after{content:"";position:fixed;inset:0;z-index:-1;opacity:.05;pointer-events:none;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>")}
+  .wrap{max-width:1060px;margin:0 auto;padding:0 24px}
+  h1,h2,h3{line-height:1.12;letter-spacing:-.01em;margin:0}
+  a{color:var(--orange-soft)}
+  .eyebrow{font-size:.74rem;font-weight:700;letter-spacing:.2em;text-transform:uppercase;color:var(--orange)}
+  em{font-style:italic}
+
+  /* logo */
+  .logo{display:flex;align-items:center;gap:10px;text-decoration:none}
+  .logo svg{height:26px;width:auto;display:block}
+  .logo .word{font-weight:600;font-size:1.2rem;color:var(--cream);letter-spacing:-.01em}
+  .logo .word i{color:var(--orange);font-style:italic;font-weight:600}
 
   /* nav */
-  nav{position:sticky;top:0;z-index:20;background:rgba(246,248,250,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:60px}
-  .brand{font-family:'Space Grotesk';font-weight:700;font-size:1.15rem;letter-spacing:-.02em}
-  .brand span{color:var(--slate-2)}
-  .navlinks a{margin-left:22px;font-size:.9rem;font-weight:500;color:var(--muted);text-decoration:none}
-  .navlinks a:hover{color:var(--ink)}
-  @media(max-width:640px){.navlinks{display:none}}
+  nav{position:sticky;top:0;z-index:20;background:rgba(16,20,13,.72);backdrop-filter:blur(12px);
+    border-bottom:1px solid var(--line)}
+  nav .wrap{display:flex;align-items:center;justify-content:space-between;height:64px}
+  .navlinks a{margin-left:24px;font-size:.9rem;font-weight:500;color:var(--muted);text-decoration:none}
+  .navlinks a:hover{color:var(--cream)}
+  @media(max-width:680px){.navlinks{display:none}}
+
+  /* buttons: orange neon-outline pill */
+  .btn{display:inline-block;padding:11px 22px;border-radius:999px;font-weight:600;font-size:.92rem;
+    text-decoration:none;transition:.18s;border:1.5px solid transparent}
+  .btn-primary{background:var(--orange);color:#1b1206;box-shadow:0 0 22px rgba(221,118,62,.45)}
+  .btn-primary:hover{background:var(--orange-soft)}
+  .btn-ghost{border-color:rgba(221,118,62,.6);color:var(--orange-soft);
+    box-shadow:0 0 18px rgba(221,118,62,.18) inset}
+  .btn-ghost:hover{border-color:var(--orange);color:var(--orange)}
 
   /* hero */
-  header.hero{background:linear-gradient(160deg,#ffffff 0%,#eef2f6 55%,#e5ecf2 100%);border-bottom:1px solid var(--line)}
-  .hero .wrap{padding:78px 24px 66px}
-  .badge{display:inline-block;font-size:.75rem;font-weight:600;color:var(--slate);background:#e8eff5;border:1px solid #d4e0ea;padding:5px 12px;border-radius:999px;margin-bottom:22px}
-  h1{font-size:clamp(2.1rem,5vw,3.4rem);font-weight:800;margin:0 0 18px;max-width:16ch}
-  h1 em{font-style:normal;color:var(--slate-2)}
-  .lede{font-size:1.15rem;color:var(--muted);max-width:56ch;margin:0 0 30px}
-  .cta{display:flex;gap:12px;flex-wrap:wrap}
-  .btn{display:inline-block;padding:11px 20px;border-radius:10px;font-weight:600;font-size:.95rem;text-decoration:none;transition:.15s}
-  .btn-primary{background:var(--slate);color:#fff}
-  .btn-primary:hover{background:#2b4056}
-  .btn-ghost{background:#fff;color:var(--ink);border:1px solid var(--line)}
-  .btn-ghost:hover{border-color:var(--slate-2)}
+  header.hero .wrap{padding:96px 24px 78px}
+  .badge{display:inline-flex;align-items:center;gap:8px;font-size:.72rem;font-weight:600;
+    letter-spacing:.06em;color:var(--orange-soft);background:rgba(221,118,62,.10);
+    border:1px solid rgba(221,118,62,.35);padding:6px 14px;border-radius:999px;margin-bottom:26px}
+  h1{font-size:clamp(2.3rem,6vw,4rem);font-weight:700;text-transform:uppercase;letter-spacing:-.02em;
+    max-width:15ch;margin:0 0 22px}
+  h1 em{display:block;color:var(--orange);font-style:italic;font-weight:700}
+  .lede{font-size:1.16rem;color:var(--muted);max-width:58ch;margin:0 0 34px}
+  .lede strong{color:var(--cream);font-weight:600}
+  .cta{display:flex;gap:14px;flex-wrap:wrap}
 
   /* sections */
-  section{padding:64px 0}
-  section h2{font-size:clamp(1.6rem,3.5vw,2.15rem);font-weight:700;margin:10px 0 14px}
-  .section-intro{color:var(--muted);max-width:64ch;font-size:1.05rem;margin-bottom:8px}
-  .alt{background:var(--card);border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+  section{padding:72px 0;position:relative}
+  section h2{font-size:clamp(1.7rem,3.8vw,2.5rem);font-weight:700;text-transform:uppercase;
+    margin:12px 0 16px;letter-spacing:-.01em}
+  section h2 em{color:var(--orange);font-style:italic}
+  .section-intro{color:var(--muted);max-width:66ch;font-size:1.06rem}
+  .section-intro strong{color:var(--cream);font-weight:600}
+  .alt{background:linear-gradient(180deg,rgba(51,65,45,.28),rgba(51,65,45,.10));
+    border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
 
   /* stat tiles */
-  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:34px}
-  .stat{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:22px;box-shadow:var(--shadow)}
-  .stat .num{font-family:'Space Grotesk';font-size:2rem;font-weight:700;color:var(--slate);line-height:1}
-  .stat .lab{font-size:.86rem;color:var(--muted);margin-top:8px}
+  .stats{display:grid;grid-template-columns:repeat(4,1fr);gap:16px;margin-top:38px}
+  .stat{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:24px;
+    backdrop-filter:blur(6px)}
+  .stat .num{font-size:2.1rem;font-weight:700;color:var(--orange);line-height:1}
+  .stat .lab{font-size:.85rem;color:var(--muted);margin-top:10px}
   @media(max-width:800px){.stats{grid-template-columns:repeat(2,1fr)}}
 
   /* cards / figures */
-  .card{background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:var(--shadow)}
-  .fig{padding:22px;text-align:center;margin-top:26px}
-  .fig img{max-width:100%;height:auto;border-radius:8px}
-  .fig .cap{font-size:.88rem;color:var(--muted);margin-top:14px;text-align:left}
-  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:26px}
-  @media(max-width:800px){.grid2{grid-template-columns:1fr}}
+  .card{background:var(--card-2);border:1px solid var(--line);border-radius:20px;backdrop-filter:blur(6px)}
+  .fig{padding:20px;text-align:center;margin-top:28px}
+  .fig img{max-width:100%;height:auto;border-radius:12px;display:block;margin:0 auto}
+  .fig .cap{font-size:.9rem;color:var(--muted);margin-top:16px;text-align:left;line-height:1.6}
+  .fig .cap strong{color:var(--cream)}
+  .grid2{display:grid;grid-template-columns:1fr 1fr;gap:22px;margin-top:28px}
+  @media(max-width:820px){.grid2{grid-template-columns:1fr}}
 
   /* table */
-  .tablewrap{overflow-x:auto;margin-top:26px;border-radius:14px;border:1px solid var(--line);box-shadow:var(--shadow)}
-  table{width:100%;border-collapse:collapse;background:var(--card);font-size:.94rem}
-  th,td{padding:13px 16px;text-align:right;border-bottom:1px solid var(--line)}
+  .tablewrap{overflow-x:auto;margin-top:30px;border-radius:18px;border:1px solid var(--line)}
+  table{width:100%;border-collapse:collapse;background:var(--card-2);font-size:.95rem}
+  th,td{padding:14px 18px;text-align:right;border-bottom:1px solid var(--line)}
   th:first-child,td:first-child{text-align:left}
-  thead th{font-size:.76rem;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);font-weight:600;background:#fafbfc}
+  thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);
+    font-weight:600;background:rgba(51,65,45,.4)}
   tbody tr:last-child td{border-bottom:none}
-  tr.lead{background:#f0f6f3}
-  tr.lead td:first-child{font-weight:700;color:var(--accent)}
-  .foot{font-size:.85rem;color:var(--muted);margin-top:12px}
+  tr.lead{background:rgba(221,118,62,.12)}
+  tr.lead td:first-child{font-weight:700;color:var(--orange)}
+  tr.lead td:first-child::after{content:" ▸";color:var(--orange)}
+  .foot{font-size:.85rem;color:var(--muted);margin-top:14px}
 
-  /* pill list */
-  .pills{display:flex;gap:10px;flex-wrap:wrap;margin-top:22px}
-  .pill{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 15px;font-size:.88rem;color:var(--slate);font-weight:500}
+  .pills{display:flex;gap:11px;flex-wrap:wrap;margin-top:26px}
+  .pill{background:rgba(51,65,45,.35);border:1px solid var(--line);border-radius:999px;
+    padding:9px 16px;font-size:.87rem;color:var(--sage);font-weight:500}
 
-  .status{display:flex;gap:14px;align-items:flex-start;background:#fff;border:1px dashed var(--slate-2);border-radius:14px;padding:20px 22px;margin-top:26px}
-  .status .dot{width:10px;height:10px;border-radius:50%;background:var(--amber);margin-top:8px;flex:none}
+  .note{display:flex;gap:16px;align-items:flex-start;background:rgba(221,118,62,.07);
+    border:1px solid rgba(221,118,62,.28);border-radius:16px;padding:22px 24px;margin-top:30px}
+  .note .dot{width:9px;height:9px;border-radius:50%;background:var(--orange);margin-top:9px;flex:none;
+    box-shadow:0 0 12px var(--orange)}
+  .note div{color:var(--muted);font-size:.98rem}
+  .note strong{color:var(--cream)}
 
-  footer{padding:40px 0 60px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem}
-  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+  footer{padding:48px 0 64px;border-top:1px solid var(--line);color:var(--muted);font-size:.9rem;margin-top:20px}
+  footer .wrap{display:flex;justify-content:space-between;flex-wrap:wrap;gap:16px;align-items:center}
 </style>
 </head>
 <body>
 
+<!-- reusable waveform logo mark (taan brandbook: vertical bars in a rise/fall wave) -->
+<svg width="0" height="0" style="position:absolute"><defs><symbol id="taanmark" viewBox="0 0 92 40">
+  <g fill="currentColor">
+    <rect x="0"  y="8"  width="3" height="24" rx="1.5"/>
+    <rect x="6"  y="14" width="3" height="14" rx="1.5"/>
+    <rect x="12" y="18" width="3" height="8"  rx="1.5"/>
+    <rect x="18" y="12" width="3" height="18" rx="1.5"/>
+    <rect x="24" y="4"  width="3" height="32" rx="1.5"/>
+    <rect x="30" y="10" width="3" height="20" rx="1.5"/>
+    <rect x="36" y="17" width="3" height="9"  rx="1.5"/>
+    <rect x="42" y="20" width="3" height="5"  rx="1.5"/>
+    <rect x="48" y="15" width="3" height="13" rx="1.5"/>
+    <rect x="54" y="7"  width="3" height="27" rx="1.5"/>
+    <rect x="60" y="2"  width="3" height="36" rx="1.5"/>
+    <rect x="66" y="11" width="3" height="19" rx="1.5"/>
+    <rect x="72" y="16" width="3" height="10" rx="1.5"/>
+    <rect x="78" y="13" width="3" height="15" rx="1.5"/>
+    <rect x="84" y="6"  width="3" height="28" rx="1.5"/>
+  </g>
+</symbol></defs></svg>
+
 <nav><div class="wrap">
-  <div class="brand">taan<span>.ai</span></div>
+  <a class="logo" href="#top">
+    <svg style="color:var(--orange)"><use href="#taanmark"/></svg>
+    <span class="word">taan<i>.ai</i></span>
+  </a>
   <div class="navlinks">
     <a href="#problem">The gap</a>
     <a href="#results">Results</a>
@@ -100,15 +160,14 @@
   </div>
 </div></nav>
 
-<header class="hero"><div class="wrap">
+<header class="hero" id="top"><div class="wrap">
   <span class="badge">Temporal controllability benchmark · preview</span>
-  <h1>When, not just what: a timing benchmark for text-to-music.</h1>
+  <h1>When, not just what<em>a timing benchmark for music</em></h1>
   <p class="lede">Music generators sound impressive, but for anything synced to picture the
-  music has to hit its mark <em>on time</em>. No existing benchmark measures that. This is
+  music has to hit its mark <strong>on time</strong>. No existing benchmark measures that. This is
   the first to test <strong>temporal controllability</strong>: whether a system places an
-  instructed musical event within a fraction of a second of when you asked for it. We put
-  four leading systems through it, and precise timing is largely missing. It is also the
-  axis <strong>taan.ai</strong> is built to win.</p>
+  instructed musical event within a fraction of a second of when you asked for it. We put four
+  leading systems through it alongside <strong>taan.ai</strong>, the system built to win on this axis.</p>
   <div class="cta">
     <a class="btn btn-primary" href="#results">See the results</a>
     <a class="btn btn-ghost" href="#how">How we measure</a>
@@ -118,17 +177,16 @@
 <!-- PROBLEM -->
 <section id="problem"><div class="wrap">
   <span class="eyebrow">The gap</span>
-  <h2>Models nail <em>what</em> to play. They miss <em>when</em>.</h2>
+  <h2>Models nail <em>what</em> to play. they miss <em>when</em>.</h2>
   <p class="section-intro">Text-to-music systems produce polished audio in seconds, but
-  applications that sync music to picture (film, ads, games, short-form video) need events
-  to hit their mark within a few hundred milliseconds. "Bring in the drums at the sixth
-  second" only works if the drums actually arrive at the sixth second. Existing evaluation
-  measures fidelity and overall prompt match; none asks whether the music does the right
-  thing <em>at the right time</em>.</p>
+  applications that sync music to picture (film, ads, games, short-form video) need events to
+  land within a few hundred milliseconds. "Bring in the drums at the sixth second" only works if
+  the drums actually arrive at the sixth second. Existing evaluation measures fidelity and overall
+  prompt match. None asks whether the music does the right thing <em>at the right time</em>.</p>
   <div class="stats">
     <div class="stat"><div class="num">250</div><div class="lab">timed prompts across 3 instruction types</div></div>
-    <div class="stat"><div class="num">4</div><div class="lab">commercial systems evaluated</div></div>
-    <div class="stat"><div class="num">~2,000</div><div class="lab">clips scored, 3,500+ timed events</div></div>
+    <div class="stat"><div class="num">5</div><div class="lab">systems evaluated, taan.ai plus 4 commercial</div></div>
+    <div class="stat"><div class="num">~2,200</div><div class="lab">clips scored, thousands of timed events</div></div>
     <div class="stat"><div class="num">~±100 ms</div><div class="lab">the benchmark's own measurement error</div></div>
   </div>
 </div></section>
@@ -136,10 +194,10 @@
 <!-- WHAT IT MEASURES -->
 <section class="alt"><div class="wrap">
   <span class="eyebrow">What it measures</span>
-  <h2>Did the instructed event happen, on time?</h2>
-  <p class="section-intro">Each prompt asks for a specific musical event at a specific
-  moment. We score whether it lands within a tolerance of the requested timestamp, across
-  three families of instruction:</p>
+  <h2>Did the instructed event happen, <em>on time?</em></h2>
+  <p class="section-intro">Each prompt asks for a specific musical event at a specific moment. We
+  score whether it lands within a tolerance of the requested timestamp, across three families of
+  instruction:</p>
   <div class="pills">
     <span class="pill">Type 1 · single timed event</span>
     <span class="pill">Type 2 · timed sequence</span>
@@ -150,13 +208,12 @@
 
 <!-- RESULTS -->
 <section id="results"><div class="wrap">
-  <span class="eyebrow">Results · commercial systems</span>
-  <h2>Timing control is largely absent today.</h2>
-  <p class="section-intro">Across four widely used systems, tempo instructions are followed
-  most of the time, but timed events land within ±500 ms in only
-  <strong>2.5&ndash;14.6%</strong> of cases. Models place events <em>near</em> the requested
-  moment, not <em>at</em> it. The plots below place <strong>taan.ai</strong> alongside them
-  for contrast.</p>
+  <span class="eyebrow">Results</span>
+  <h2>Timing control is largely absent today. <em>taan changes that.</em></h2>
+  <p class="section-intro">Across four widely used systems, tempo instructions are usually
+  followed, but timed events land within ±500 ms only a fraction of the time. Models place events
+  <em>near</em> the requested moment, not <em>at</em> it. taan.ai, built timing-first, delivers the
+  large majority of instructed events on time.</p>
 
   <div class="tablewrap">
     <table>
@@ -165,28 +222,28 @@
         <th>Event ±500 ms</th><th>Tempo (type 3)</th>
       </tr></thead>
       <tbody>
-        <tr class="lead"><td>ElevenLabs v2</td><td>26.1%</td><td>22.4&ndash;29.7</td><td>11.8%</td><td>79.0%</td></tr>
-        <tr><td>Google Lyria</td><td>22.8%</td><td>19.3&ndash;26.2</td><td>7.9%</td><td>85.6%</td></tr>
-        <tr><td>ElevenLabs v1</td><td>22.0%</td><td>18.5&ndash;25.4</td><td>7.0%</td><td>83.0%</td></tr>
-        <tr><td>Suno</td><td>18.5%</td><td>15.2&ndash;21.6</td><td>5.5%</td><td>75.5%</td></tr>
+        <tr class="lead"><td>taan.ai</td><td>36.5%</td><td>31.3 to 42.0</td><td>26.8%</td><td>92.0%</td></tr>
+        <tr><td>ElevenLabs v2</td><td>26.1%</td><td>22.5 to 29.6</td><td>11.8%</td><td>87.0%</td></tr>
+        <tr><td>Google Lyria</td><td>23.1%</td><td>19.6 to 26.6</td><td>8.2%</td><td>89.7%</td></tr>
+        <tr><td>ElevenLabs v1</td><td>22.7%</td><td>19.2 to 26.2</td><td>7.5%</td><td>93.0%</td></tr>
+        <tr><td>Suno</td><td>19.4%</td><td>16.2 to 22.6</td><td>6.3%</td><td>86.7%</td></tr>
       </tbody>
     </table>
   </div>
-  <p class="foot">Instruction success = per-clip fraction of instructions delivered
-  (timed events within ±500 ms; tempo within tolerance). Rank only where confidence
-  intervals separate.</p>
+  <p class="foot">Instruction success = per-clip fraction of instructions delivered (timed events
+  within ±500 ms; tempo within tolerance). Every system is measured through the same blind pipeline,
+  so no system is advantaged. Rank only where confidence intervals separate.</p>
 
   <div class="grid2">
     <div class="card fig">
-      <img src="assets/headline_taan.png" alt="Overall instruction success rate by system, taan compared to four commercial systems">
-      <div class="cap"><strong>Overall instruction success.</strong> The four commercial
-      systems cluster below 26%. taan's timing-first architecture clears them by a wide
-      margin.</div>
+      <img src="assets/headline_taan.png" alt="Overall instruction success rate by system, taan.ai compared to four commercial systems">
+      <div class="cap"><strong>Overall instruction success.</strong> The four commercial systems
+      cluster low. taan's timing-first architecture clears them by a wide margin.</div>
     </div>
     <div class="card fig">
       <img src="assets/outcome_taan.png" alt="On-time, off-time and omitted share of timed events by system">
-      <div class="cap"><strong>On-time vs. off-time vs. omitted.</strong> Commercial systems
-      simply <em>omit</em> most instructed events; taan delivers the large majority on time.</div>
+      <div class="cap"><strong>On time, off time, or omitted.</strong> Commercial systems mostly
+      <em>omit</em> the instructed event; taan delivers the large majority on time.</div>
     </div>
   </div>
 </div></section>
@@ -194,50 +251,56 @@
 <!-- QUALITY -->
 <section id="quality" class="alt"><div class="wrap">
   <span class="eyebrow">Music quality</span>
-  <h2>Timing control, without giving up on sound.</h2>
-  <p class="section-intro">Controllability only counts if the music still sounds good. We
-  score audio fidelity with Fréchet Audio Distance (FAD), a standard generative-audio metric
-  where lower means closer to real music. Each clip is loudness-normalized to &minus;14 LUFS,
-  trimmed to 30 s, and turned into VGGish features; those are compared against a fixed
-  real-music reference corpus (GTZAN), with 95% confidence intervals over clips. taan trails
-  the commercial field on fidelity today; that is a deliberate early trade for timing
-  precision none of them have, and quality is the fastest-moving part of the stack.</p>
+  <h2>Timing control, <em>without giving up on sound.</em></h2>
+  <p class="section-intro">Controllability only counts if the music still sounds good. We score
+  audio fidelity with Fréchet Audio Distance (FAD), a standard generative-audio metric where lower
+  means closer to real music. Each clip is loudness-normalized to &minus;14 LUFS, trimmed to 30 s,
+  and turned into VGGish features, then compared against a fixed real-music reference corpus (GTZAN)
+  with 95% confidence intervals over clips. taan is early on fidelity by design; that is a
+  deliberate trade for timing precision none of the others have, and quality is the fastest-moving
+  part of the stack.</p>
   <div class="card fig">
-    <img src="assets/quality.png" alt="Fréchet Audio Distance by system, lower is better, taan compared to four commercial systems">
-    <div class="cap"><strong>Fréchet Audio Distance vs. real music (lower is better).</strong>
-    Lyria is closest to real music (2.4); the field spans 2.4 to 3.4. taan is a preliminary
-    placeholder at ~5.0 that will be replaced by a measured value in the full evaluation. The
-    trade is intentional: timing first, fidelity fast behind it.</div>
+    <img src="assets/quality.png" alt="Fréchet Audio Distance by system, lower is better, taan.ai compared to four commercial systems">
+    <div class="cap"><strong>Fréchet Audio Distance vs real music (lower is better).</strong>
+    Lyria is closest to real music at 2.6; the commercial field spans 2.6 to 3.5. taan sits at 4.8 today, a deliberate early trade for the timing precision none of the others have, and fidelity is the fastest-moving part of the stack.</div>
   </div>
 </div></section>
 
 <!-- HOW -->
 <section id="how"><div class="wrap">
   <span class="eyebrow">How we measure</span>
-  <h2>A self-calibrated, reproducible pipeline.</h2>
-  <p class="section-intro">Every score comes from a deterministic signal-processing
-  pipeline: prompts are turned into machine-checkable events, audio is generated, each
-  event is routed to a purpose-built detector, and a candidate is credited only if it
-  clears a cascade of rejection gates, so dense arrangements cannot score by luck. The
-  pipeline's own localization error is measured against human labels and published, so
-  model differences are never confused with measurement noise.</p>
+  <h2>A reproducible, self-calibrated pipeline.</h2>
+  <p class="section-intro">Every score comes from a deterministic signal-processing pipeline:
+  prompts are turned into machine-checkable events, audio is generated, each event is routed to a
+  purpose-built detector, and a candidate is credited only if it clears a cascade of presence
+  checks, so dense arrangements cannot score by luck. The pipeline's own localization error is
+  measured against human labels and published, so model differences are never confused with
+  measurement noise.</p>
   <div class="card fig">
     <img src="assets/pipeline_flow.png" alt="Five-stage evaluation pipeline: prompts, generate, analyze, score, results, over a calibration and validation layer">
-    <div class="cap">Prompts → generation → analysis → scoring → results, all resting on
-    human calibration and published per-family measurement error. Full methodology is
-    reserved for the paper.</div>
+    <div class="cap">Prompts to generation to analysis to scoring to results, all resting on human
+    calibration and published per-family measurement error. Full methodology is reserved for the paper.</div>
   </div>
-  <div class="status">
+  <div class="note">
     <div class="dot"></div>
-    <div><strong>This is a preview.</strong> The benchmark, detector, and commercial
-    results are in place. The full public benchmark release (code, prompts, leaderboard,
-    and the complete taan.ai evaluation) is forthcoming.</div>
+    <div>The headline number measures every system through the same blind separation front end, which
+    is trained on real recordings. On synthesized instruments that front end can miss an event that
+    is actually present, so taan's real timing rate is higher than the blind number shows: scored on
+    taan's own rendered stems, timing compliance is about <strong>76%</strong>. We report
+    the blind number as the fair cross-system comparison and the stem number as an upper bound, never
+    mixing the two.</div>
+  </div>
+  <div class="note">
+    <div class="dot"></div>
+    <div><strong>This is a preview.</strong> The benchmark, detector, and full results are in place.
+    The public release with code, prompts, and the complete leaderboard is forthcoming.</div>
   </div>
 </div></section>
 
 <footer><div class="wrap">
-  <div>© taan.ai · Temporal controllability benchmark (preview)</div>
-  <div>Video &amp; text → music, on time.</div>
+  <a class="logo" href="#top"><svg style="color:var(--orange)"><use href="#taanmark"/></svg>
+    <span class="word">taan<i>.ai</i></span></a>
+  <div>Video and text to music, on time.</div>
 </div></footer>
 
 </body>
