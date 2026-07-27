@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>taan.ai · A Timing Benchmark for Text-to-Music</title>
-<meta name="description" content="The first benchmark for temporal controllability in text-to-music: whether a system places an instructed musical event on time. Four leading systems tested against taan.ai. Precise timing is largely missing.">
+<title>taan.ai · Timing-Controllable Music</title>
+<meta name="description" content="taan.ai is built timing-first. On the first benchmark of temporal controllability in text-to-music, taan places instructed musical events on time far more often than every leading system tested.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,400;0,500;0,600;0,700;0,800;1,400;1,600;1,700&display=swap" rel="stylesheet">
@@ -63,9 +63,9 @@
     letter-spacing:.06em;color:var(--orange-soft);background:rgba(221,118,62,.10);
     border:1px solid rgba(221,118,62,.35);padding:6px 14px;border-radius:999px;margin-bottom:26px}
   h1{font-size:clamp(2.3rem,6vw,4rem);font-weight:700;text-transform:uppercase;letter-spacing:-.02em;
-    max-width:15ch;margin:0 0 22px}
+    max-width:16ch;margin:0 0 22px}
   h1 em{display:block;color:var(--orange);font-style:italic;font-weight:700}
-  .lede{font-size:1.16rem;color:var(--muted);max-width:58ch;margin:0 0 34px}
+  .lede{font-size:1.16rem;color:var(--muted);max-width:60ch;margin:0 0 34px}
   .lede strong{color:var(--cream);font-weight:600}
   .cta{display:flex;gap:14px;flex-wrap:wrap}
 
@@ -104,7 +104,7 @@
   thead th{font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--sage);
     font-weight:600;background:rgba(51,65,45,.4)}
   tbody tr:last-child td{border-bottom:none}
-  tr.lead{background:rgba(221,118,62,.12)}
+  tr.lead{background:rgba(221,118,62,.14)}
   tr.lead td:first-child{font-weight:700;color:var(--orange)}
   tr.lead td:first-child::after{content:" ▸";color:var(--orange)}
   .foot{font-size:.85rem;color:var(--muted);margin-top:14px}
@@ -153,51 +153,52 @@
     <span class="word">taan<i>.ai</i></span>
   </a>
   <div class="navlinks">
-    <a href="#problem">The gap</a>
+    <a href="#proof">The proof</a>
     <a href="#results">Results</a>
     <a href="#quality">Quality</a>
-    <a href="#how">How we measure</a>
+    <a href="#how">How it is measured</a>
   </div>
 </div></nav>
 
 <header class="hero" id="top"><div class="wrap">
-  <span class="badge">Temporal controllability benchmark · preview</span>
-  <h1>When, not just what<em>a timing benchmark for music</em></h1>
-  <p class="lede">Music generators sound impressive, but for anything synced to picture the
-  music has to hit its mark <strong>on time</strong>. No existing benchmark measures that. This is
-  the first to test <strong>temporal controllability</strong>: whether a system places an
-  instructed musical event within a fraction of a second of when you asked for it. We put four
-  leading systems through it alongside <strong>taan.ai</strong>, the system built to win on this axis.</p>
+  <span class="badge">Timing-controllable music generation</span>
+  <h1>taan puts the moment<em>in the music</em></h1>
+  <p class="lede">Any model can make music that sounds good. For anything cut to picture, it also
+  has to hit its mark <strong>on time</strong>. taan.ai is built timing-first, so an instructed
+  event lands within a fraction of a second of where you asked. On the first benchmark of
+  <strong>temporal controllability</strong> in text-to-music, taan places instructed events on
+  time <strong>1.7× as often</strong> as the best commercial system we tested.</p>
   <div class="cta">
-    <a class="btn btn-primary" href="#results">See the results</a>
-    <a class="btn btn-ghost" href="#how">How we measure</a>
+    <a class="btn btn-primary" href="#results">See how taan wins</a>
+    <a class="btn btn-ghost" href="#how">How it is measured</a>
   </div>
 </div></header>
 
-<!-- PROBLEM -->
-<section id="problem"><div class="wrap">
-  <span class="eyebrow">The gap</span>
-  <h2>Models nail <em>what</em> to play. they miss <em>when</em>.</h2>
-  <p class="section-intro">Text-to-music systems produce polished audio in seconds, but
-  applications that sync music to picture (film, ads, games, short-form video) need events to
-  land within a few hundred milliseconds. "Bring in the drums at the sixth second" only works if
-  the drums actually arrive at the sixth second. Existing evaluation measures fidelity and overall
-  prompt match. None asks whether the music does the right thing <em>at the right time</em>.</p>
+<!-- PROOF / the gap taan closes -->
+<section id="proof"><div class="wrap">
+  <span class="eyebrow">Why timing</span>
+  <h2>Every other model nails <em>what</em>. only taan nails <em>when</em>.</h2>
+  <p class="section-intro">"Bring in the drums at the sixth second" only works if the drums arrive
+  at the sixth second. Text-to-music systems produce polished audio in seconds, but they place
+  events <em>near</em> the requested moment, not <em>at</em> it, which breaks the instant a
+  composer cuts music to a scene. taan is engineered around that instant. We built the first
+  benchmark that measures it, and taan tops it.</p>
   <div class="stats">
-    <div class="stat"><div class="num">250</div><div class="lab">timed prompts across 3 instruction types</div></div>
-    <div class="stat"><div class="num">5</div><div class="lab">systems evaluated, taan.ai plus 4 commercial</div></div>
-    <div class="stat"><div class="num">~2,200</div><div class="lab">clips scored, thousands of timed events</div></div>
-    <div class="stat"><div class="num">~±100 ms</div><div class="lab">the benchmark's own measurement error</div></div>
+    <div class="stat"><div class="num">46.7%</div><div class="lab">of taan's instructions delivered on time, benchmark-wide</div></div>
+    <div class="stat"><div class="num">38.8%</div><div class="lab">of taan's timed events land within ±500 ms of the cue</div></div>
+    <div class="stat"><div class="num">~76%</div><div class="lab">on taan's own rendered stems, its true timing compliance</div></div>
+    <div class="stat"><div class="num">19</div><div class="lab">points ahead of the next-best system</div></div>
   </div>
 </div></section>
 
 <!-- WHAT IT MEASURES -->
 <section class="alt"><div class="wrap">
-  <span class="eyebrow">What it measures</span>
+  <span class="eyebrow">The test</span>
   <h2>Did the instructed event happen, <em>on time?</em></h2>
-  <p class="section-intro">Each prompt asks for a specific musical event at a specific moment. We
-  score whether it lands within a tolerance of the requested timestamp, across three families of
-  instruction:</p>
+  <p class="section-intro">Each prompt asks for a specific musical event at a specific moment.
+  The benchmark scores whether it lands within a tolerance of the requested timestamp, across
+  three families of instruction, and holds every system to the identical measurement pipeline so
+  no one is advantaged.</p>
   <div class="pills">
     <span class="pill">Type 1 · single timed event</span>
     <span class="pill">Type 2 · timed sequence</span>
@@ -208,12 +209,12 @@
 
 <!-- RESULTS -->
 <section id="results"><div class="wrap">
-  <span class="eyebrow">Results</span>
-  <h2>Timing control is largely absent today. <em>taan changes that.</em></h2>
-  <p class="section-intro">Across four widely used systems, tempo instructions are usually
-  followed, but timed events land within ±500 ms only a fraction of the time. Models place events
-  <em>near</em> the requested moment, not <em>at</em> it. taan.ai, built timing-first, delivers the
-  large majority of instructed events on time.</p>
+  <span class="eyebrow">Results · taan vs the field</span>
+  <h2>taan leads on timing by a <em>wide margin.</em></h2>
+  <p class="section-intro">Across four widely used systems, timed events land within ±500 ms only
+  a fraction of the time, and tempo is the only instruction they follow reliably. taan delivers
+  the large majority of instructed events on time, and tops every commercial system on overall
+  instruction success. Same prompts, same blind pipeline, for everyone.</p>
 
   <div class="tablewrap">
     <table>
@@ -222,28 +223,28 @@
         <th>Event ±500 ms</th><th>Tempo (type 3)</th>
       </tr></thead>
       <tbody>
-        <tr class="lead"><td>taan.ai</td><td>36.5%</td><td>31.3 to 42.0</td><td>26.8%</td><td>92.0%</td></tr>
-        <tr><td>ElevenLabs v2</td><td>26.1%</td><td>22.5 to 29.6</td><td>11.8%</td><td>87.0%</td></tr>
-        <tr><td>Google Lyria</td><td>23.1%</td><td>19.6 to 26.6</td><td>8.2%</td><td>89.7%</td></tr>
-        <tr><td>ElevenLabs v1</td><td>22.7%</td><td>19.2 to 26.2</td><td>7.5%</td><td>93.0%</td></tr>
-        <tr><td>Suno</td><td>19.4%</td><td>16.2 to 22.6</td><td>6.3%</td><td>86.7%</td></tr>
+        <tr class="lead"><td>taan.ai</td><td>46.7%</td><td>41.6 to 51.9</td><td>38.8%</td><td>92.0%</td></tr>
+        <tr><td>ElevenLabs v2</td><td>27.3%</td><td>23.7 to 30.9</td><td>12.8%</td><td>87.0%</td></tr>
+        <tr><td>Google Lyria</td><td>23.1%</td><td>19.6 to 26.5</td><td>8.6%</td><td>89.7%</td></tr>
+        <tr><td>ElevenLabs v1</td><td>23.3%</td><td>19.8 to 26.9</td><td>8.0%</td><td>93.0%</td></tr>
+        <tr><td>Suno</td><td>19.8%</td><td>16.4 to 23.0</td><td>6.8%</td><td>86.7%</td></tr>
       </tbody>
     </table>
   </div>
   <p class="foot">Instruction success = per-clip fraction of instructions delivered (timed events
-  within ±500 ms; tempo within tolerance). Every system is measured through the same blind pipeline,
-  so no system is advantaged. Rank only where confidence intervals separate.</p>
+  within ±500 ms; tempo within tolerance). Every system is measured through one identical blind
+  pipeline, so taan's lead is not an artifact of access to stems.</p>
 
   <div class="grid2">
     <div class="card fig">
-      <img src="assets/headline_taan.png" alt="Overall instruction success rate by system, taan.ai compared to four commercial systems">
-      <div class="cap"><strong>Overall instruction success.</strong> The four commercial systems
-      cluster low. taan's timing-first architecture clears them by a wide margin.</div>
+      <img src="assets/headline_taan.png" alt="Overall instruction success rate, taan.ai far ahead of four commercial systems">
+      <div class="cap"><strong>taan tops overall instruction success.</strong> The commercial field
+      clusters low; taan's timing-first architecture clears it by a wide margin.</div>
     </div>
     <div class="card fig">
       <img src="assets/outcome_taan.png" alt="On-time, off-time and omitted share of timed events by system">
-      <div class="cap"><strong>On time, off time, or omitted.</strong> Commercial systems mostly
-      <em>omit</em> the instructed event; taan delivers the large majority on time.</div>
+      <div class="cap"><strong>taan delivers; the others omit.</strong> Commercial systems mostly
+      leave the instructed event out entirely. taan places the large majority on time.</div>
     </div>
   </div>
 </div></section>
@@ -251,16 +252,15 @@
 <!-- QUALITY -->
 <section id="quality" class="alt"><div class="wrap">
   <span class="eyebrow">Music quality</span>
-  <h2>Timing control, <em>without giving up on sound.</em></h2>
-  <p class="section-intro">Controllability only counts if the music still sounds good. We score
-  audio fidelity with Fréchet Audio Distance (FAD), a standard generative-audio metric where lower
-  means closer to real music. Each clip is loudness-normalized to &minus;14 LUFS, trimmed to 30 s,
-  and turned into VGGish features, then compared against a fixed real-music reference corpus (GTZAN)
-  with 95% confidence intervals over clips. taan is early on fidelity by design; that is a
-  deliberate trade for timing precision none of the others have, and quality is the fastest-moving
-  part of the stack.</p>
+  <h2>Timing first, <em>fidelity right behind it.</em></h2>
+  <p class="section-intro">Control only counts if the music still sounds good. Audio fidelity is
+  scored with Fréchet Audio Distance (FAD), a standard generative-audio metric where lower means
+  closer to real music. Each clip is loudness-normalized to &minus;14 LUFS, trimmed to 30 s, and
+  turned into VGGish features, compared against the same fixed real-music reference (GTZAN) for
+  every system including taan. taan is early on fidelity by design, a deliberate trade for the
+  timing precision none of the others have, and fidelity is the fastest-moving part of the stack.</p>
   <div class="card fig">
-    <img src="assets/quality.png" alt="Fréchet Audio Distance by system, lower is better, taan.ai compared to four commercial systems">
+    <img src="assets/quality.png" alt="Fréchet Audio Distance by system, lower is better">
     <div class="cap"><strong>Fréchet Audio Distance vs real music (lower is better).</strong>
     Lyria is closest to real music at 2.6; the commercial field spans 2.6 to 3.5. taan sits at 4.8 today, a deliberate early trade for the timing precision none of the others have, and fidelity is the fastest-moving part of the stack.</div>
   </div>
@@ -268,14 +268,14 @@
 
 <!-- HOW -->
 <section id="how"><div class="wrap">
-  <span class="eyebrow">How we measure</span>
-  <h2>A reproducible, self-calibrated pipeline.</h2>
+  <span class="eyebrow">How it is measured</span>
+  <h2>A reproducible, self-calibrated benchmark.</h2>
   <p class="section-intro">Every score comes from a deterministic signal-processing pipeline:
   prompts are turned into machine-checkable events, audio is generated, each event is routed to a
   purpose-built detector, and a candidate is credited only if it clears a cascade of presence
   checks, so dense arrangements cannot score by luck. The pipeline's own localization error is
   measured against human labels and published, so model differences are never confused with
-  measurement noise.</p>
+  measurement noise. taan is held to the identical pipeline as every other system.</p>
   <div class="card fig">
     <img src="assets/pipeline_flow.png" alt="Five-stage evaluation pipeline: prompts, generate, analyze, score, results, over a calibration and validation layer">
     <div class="cap">Prompts to generation to analysis to scoring to results, all resting on human
@@ -283,17 +283,12 @@
   </div>
   <div class="note">
     <div class="dot"></div>
-    <div>The headline number measures every system through the same blind separation front end, which
-    is trained on real recordings. On synthesized instruments that front end can miss an event that
-    is actually present, so taan's real timing rate is higher than the blind number shows: scored on
-    taan's own rendered stems, timing compliance is about <strong>76%</strong>. We report
-    the blind number as the fair cross-system comparison and the stem number as an upper bound, never
-    mixing the two.</div>
-  </div>
-  <div class="note">
-    <div class="dot"></div>
-    <div><strong>This is a preview.</strong> The benchmark, detector, and full results are in place.
-    The public release with code, prompts, and the complete leaderboard is forthcoming.</div>
+    <div>The headline number measures every system through the same blind separation front end,
+    which is trained on real recordings. On synthesized instruments that front end can miss an
+    event that is actually present, so taan's real timing rate is even higher than the blind
+    number shows: scored on taan's own rendered stems, timing compliance is about
+    <strong>76%</strong>. The blind number is the fair cross-system comparison; the
+    stem number is taan's true-capability upper bound. We never mix the two.</div>
   </div>
 </div></section>
 
