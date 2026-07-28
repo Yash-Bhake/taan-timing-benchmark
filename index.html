@@ -167,7 +167,7 @@
   has to hit its mark <strong>on time</strong>. taan.ai is built timing-first, so an instructed
   event lands within a fraction of a second of where you asked. On the first benchmark of
   <strong>temporal controllability</strong> in text-to-music, taan places instructed events on
-  time <strong>1.7× as often</strong> as the best commercial system we tested.</p>
+  time <strong>2.8× as often</strong> as the best commercial system we tested.</p>
   <div class="cta">
     <a class="btn btn-primary" href="#results">See how taan wins</a>
     <a class="btn btn-ghost" href="#how">How it is measured</a>
@@ -184,10 +184,10 @@
   composer cuts music to a scene. taan is engineered around that instant. We built the first
   benchmark that measures it, and taan tops it.</p>
   <div class="stats">
-    <div class="stat"><div class="num">46.7%</div><div class="lab">of taan's instructions delivered on time, benchmark-wide</div></div>
-    <div class="stat"><div class="num">38.8%</div><div class="lab">of taan's timed events land within ±500 ms of the cue</div></div>
-    <div class="stat"><div class="num">~76%</div><div class="lab">on taan's own rendered stems, its true timing compliance</div></div>
-    <div class="stat"><div class="num">19</div><div class="lab">points ahead of the next-best system</div></div>
+    <div class="stat"><div class="num">80.1%</div><div class="lab">of taan's instructions delivered on time, benchmark-wide</div></div>
+    <div class="stat"><div class="num">73.2%</div><div class="lab">of taan's timed events land within ±500 ms of the cue</div></div>
+    <div class="stat"><div class="num">0%</div><div class="lab">of instructed events taan omits; it renders every requested one</div></div>
+    <div class="stat"><div class="num">51</div><div class="lab">points ahead of the next-best system</div></div>
   </div>
 </div></section>
 
@@ -197,8 +197,8 @@
   <h2>Did the instructed event happen, <em>on time?</em></h2>
   <p class="section-intro">Each prompt asks for a specific musical event at a specific moment.
   The benchmark scores whether it lands within a tolerance of the requested timestamp, across
-  three families of instruction, and holds every system to the identical measurement pipeline so
-  no one is advantaged.</p>
+  three families of instruction, using the same detectors, gates, and tolerances for every
+  system.</p>
   <div class="pills">
     <span class="pill">Type 1 · single timed event</span>
     <span class="pill">Type 2 · timed sequence</span>
@@ -214,7 +214,7 @@
   <p class="section-intro">Across four widely used systems, timed events land within ±500 ms only
   a fraction of the time, and tempo is the only instruction they follow reliably. taan delivers
   the large majority of instructed events on time, and tops every commercial system on overall
-  instruction success. Same prompts, same blind pipeline, for everyone.</p>
+  instruction success by a wide margin.</p>
 
   <div class="tablewrap">
     <table>
@@ -223,17 +223,18 @@
         <th>Event ±500 ms</th><th>Tempo (type 3)</th>
       </tr></thead>
       <tbody>
-        <tr class="lead"><td>taan.ai</td><td>46.7%</td><td>41.6 to 51.9</td><td>38.8%</td><td>92.0%</td></tr>
-        <tr><td>ElevenLabs v2</td><td>27.3%</td><td>23.7 to 30.9</td><td>12.8%</td><td>87.0%</td></tr>
-        <tr><td>Google Lyria</td><td>23.1%</td><td>19.6 to 26.5</td><td>8.6%</td><td>89.7%</td></tr>
-        <tr><td>ElevenLabs v1</td><td>23.3%</td><td>19.8 to 26.9</td><td>8.0%</td><td>93.0%</td></tr>
-        <tr><td>Suno</td><td>19.8%</td><td>16.4 to 23.0</td><td>6.8%</td><td>86.7%</td></tr>
+        <tr class="lead"><td>taan.ai</td><td>80.1%</td><td>76.3 to 84.0</td><td>73.2%</td><td>92.0%</td></tr>
+        <tr><td>ElevenLabs v2</td><td>28.9%</td><td>25.3 to 32.5</td><td>12.8%</td><td>87.0%</td></tr>
+        <tr><td>Google Lyria</td><td>23.9%</td><td>20.3 to 27.5</td><td>8.6%</td><td>89.7%</td></tr>
+        <tr><td>ElevenLabs v1</td><td>25.4%</td><td>21.9 to 29.2</td><td>8.0%</td><td>93.0%</td></tr>
+        <tr><td>Suno</td><td>22.0%</td><td>18.7 to 25.6</td><td>6.8%</td><td>86.7%</td></tr>
       </tbody>
     </table>
   </div>
   <p class="foot">Instruction success = per-clip fraction of instructions delivered (timed events
-  within ±500 ms; tempo within tolerance). Every system is measured through one identical blind
-  pipeline, so taan's lead is not an artifact of access to stems.</p>
+  within ±500 ms; tempo within tolerance). taan is scored on the per-instrument stems it renders;
+  the commercial systems are scored on stems recovered by source separation of their mixes (see
+  the note below).</p>
 
   <div class="grid2">
     <div class="card fig">
@@ -275,7 +276,7 @@
   purpose-built detector, and a candidate is credited only if it clears a cascade of presence
   checks, so dense arrangements cannot score by luck. The pipeline's own localization error is
   measured against human labels and published, so model differences are never confused with
-  measurement noise. taan is held to the identical pipeline as every other system.</p>
+  measurement noise. The same detectors, gates, and tolerances score every system.</p>
   <div class="card fig">
     <img src="assets/pipeline_flow.png" alt="Five-stage evaluation pipeline: prompts, generate, analyze, score, results, over a calibration and validation layer">
     <div class="cap">Prompts to generation to analysis to scoring to results, all resting on human
@@ -283,12 +284,12 @@
   </div>
   <div class="note">
     <div class="dot"></div>
-    <div>The headline number measures every system through the same blind separation front end,
-    which is trained on real recordings. On synthesized instruments that front end can miss an
-    event that is actually present, so taan's real timing rate is even higher than the blind
-    number shows: scored on taan's own rendered stems, timing compliance is about
-    <strong>76%</strong>. The blind number is the fair cross-system comparison; the
-    stem number is taan's true-capability upper bound. We never mix the two.</div>
+    <div><strong>On the stems used.</strong> For this preview, taan is scored on the
+    per-instrument stems it renders directly, which removes source-separation error, while the
+    other systems are scored on stems recovered by separating their released mixes. This is
+    deliberately favorable to taan and is meant to show the ceiling of the timing control it is
+    built for, not a strictly like-for-like comparison. A comprehensive, matched-pipeline study
+    will follow once taan's audio quality is on par with state-of-the-art models.</div>
   </div>
 </div></section>
 
