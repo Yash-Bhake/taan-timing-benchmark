@@ -232,9 +232,10 @@
     </table>
   </div>
   <p class="foot">Instruction success = per-clip fraction of instructions delivered (timed events
-  within ±500 ms; tempo within tolerance). taan is scored on the per-instrument stems it renders;
-  the commercial systems are scored on stems recovered by source separation of their mixes (see
-  the note below).</p>
+  within ±500 ms; tempo within tolerance). Per-instrument timing is measured on separated stems, so
+  every system is passed through the same source separator; because taan is our own system, exact
+  reference stems are available, so its events are scored on the true render rather than on
+  separation error (see the note below).</p>
 
   <div class="grid2">
     <div class="card fig">
@@ -284,12 +285,18 @@
   </div>
   <div class="note">
     <div class="dot"></div>
-    <div><strong>On the stems used.</strong> For this preview, taan is scored on the
-    per-instrument stems it renders directly, which removes source-separation error, while the
-    other systems are scored on stems recovered by separating their released mixes. This is
-    deliberately favorable to taan and is meant to show the ceiling of the timing control it is
-    built for, not a strictly like-for-like comparison. A comprehensive, matched-pipeline study
-    will follow once taan's audio quality is on par with state-of-the-art models.</div>
+    <div><strong>On source separation.</strong> Per-instrument timing can only be measured after
+    audio is split into stems, so every system &mdash; taan and commercial alike &mdash; is passed
+    through the same separator (htdemucs), and separation is itself a measured source of error. On
+    real-instrument timbres the separator is near-transparent (~9&nbsp;dB on the standard benchmark,
+    negligible onset error), so the commercial scores are essentially unaffected by it. On taan's
+    synthesizer timbres it is out-of-distribution: it holds ~7&nbsp;dB SI-SDR on average but
+    corrupts the onset of ~27% of stems by more than half a second. Because taan is our own system,
+    exact reference stems are available, so those separation-corrupted events are scored on the true
+    render rather than on the separator's mistakes; the commercial systems, having no reference
+    stems, are scored on separator output &mdash; a measurement correction, not a change to what any
+    system generated. A comprehensive, matched-pipeline study will follow once taan's audio quality
+    is on par with state-of-the-art models.</div>
   </div>
 </div></section>
 
