@@ -285,18 +285,14 @@
   </div>
   <div class="note">
     <div class="dot"></div>
-    <div><strong>On source separation.</strong> Per-instrument timing can only be measured after
-    audio is split into stems, so every system &mdash; taan and commercial alike &mdash; is passed
-    through the same separator (htdemucs), and separation is itself a measured source of error. On
-    real-instrument timbres the separator is near-transparent (~9&nbsp;dB on the standard benchmark,
-    negligible onset error), so the commercial scores are essentially unaffected by it. On taan's
-    synthesizer timbres it is out-of-distribution: it holds ~7&nbsp;dB SI-SDR on average but
-    corrupts the onset of ~27% of stems by more than half a second. Because taan is our own system,
-    exact reference stems are available, so those separation-corrupted events are scored on the true
-    render rather than on the separator's mistakes; the commercial systems, having no reference
-    stems, are scored on separator output &mdash; a measurement correction, not a change to what any
-    system generated. A comprehensive, matched-pipeline study will follow once taan's audio quality
-    is on par with state-of-the-art models.</div>
+    <div><strong>On source separation.</strong> Per-instrument timing can be measured after audio is split into stems, 
+      so every system has to go through stem separation (htdemucs). The separation is itself a measured source of error. On
+      real-instrument timbres (to which commercial models come very near), the separator is near-transparent (~9&nbsp;dB on the standard benchmark- musdbhq18,
+      negligible onset error), so the commercial scores are essentially unaffected by it, and hence we use htdemucs for all the commercial systems. 
+      On taan's current synthetic timbres it is out-of-distribution for htdemucs or any sota source separation model, hence there is a 
+      significant SI-SDR fall following corrupting the onsets of ~27% of the stems by more than 0.5s. Because taan is our own system, 
+      exact reference stems are available, so those separation-corrupted events are scored on the exact stems. 
+    </div>
   </div>
 </div></section>
 
